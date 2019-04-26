@@ -9,12 +9,19 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private let outputLabel =  NumberOutputLabel()
     
-    private let buttonHolderView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        return view
+    private let outputLabel =  NumberOutputLabel()
+    private var buttonsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .black
+        collectionView.register(CalculatorButtonCollectionViewCell.self,
+                                forCellWithReuseIdentifier: "Cell")
+        return collectionView
     }()
     
     private var calculator = Calculator()
@@ -24,7 +31,11 @@ class ViewController: UIViewController {
         view.backgroundColor = .black
 
         view.addSubview(outputLabel)
-        view.addSubview(buttonHolderView)
+        view.addSubview(buttonsCollectionView)
+        
+        
+        buttonsCollectionView.delegate = self
+        buttonsCollectionView.dataSource = self
         
         configureConstraints()
     }
@@ -37,13 +48,15 @@ class ViewController: UIViewController {
     
     private func configureConstraints() {
         outputLabel.translatesAutoresizingMaskIntoConstraints = false
-        buttonHolderView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
         let views: [String: Any] = [
             "outputLabel": outputLabel,
-            "buttonHolderView": buttonHolderView
+            "buttonsCollectionView": buttonsCollectionView
         ]
         var constraints: [NSLayoutConstraint] = []
+        
+        // Horizontal constraints
         
         let outputLabelHorizontalConstraints = NSLayoutConstraint.constraints(
             withVisualFormat: "|-24-[outputLabel]-24-|",
@@ -52,22 +65,50 @@ class ViewController: UIViewController {
             views: views)
         constraints += outputLabelHorizontalConstraints
         
-        let outputLabelVerticalConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-200-[outputLabel][buttonHolderView]-0-|",
-            options: [],
-            metrics: nil,
-            views: views)
-        constraints += outputLabelVerticalConstraints
-        
         let buttonHolderViewHorizontalConstraings = NSLayoutConstraint.constraints(
-            withVisualFormat: "|-16-[buttonHolderView]-16-|",
+            withVisualFormat: "|-16-[buttonsCollectionView]-16-|",
             options: [],
             metrics: nil,
             views: views)
         constraints += buttonHolderViewHorizontalConstraings
         
+        // Vertical constraints
+        
+        let verticalConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-200-[outputLabel][buttonsCollectionView]-0-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        constraints += verticalConstraints
+        
         NSLayoutConstraint.activate(constraints)
     }
+}
 
+// MARK: - Collection view
+
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 12
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalculatorButtonCollectionViewCell
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        debugPrint("hello")
+        let oneFourthOfScreenWidth = collectionView.frame.width / 4
+        let size = CGSize(width: oneFourthOfScreenWidth,
+                          height: oneFourthOfScreenWidth)
+        
+        return size
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
 }
 
