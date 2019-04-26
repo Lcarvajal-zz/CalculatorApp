@@ -99,7 +99,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        debugPrint("hello")
         let oneFourthOfScreenWidth = collectionView.frame.width / 4
         let size = CGSize(width: oneFourthOfScreenWidth,
                           height: oneFourthOfScreenWidth)
