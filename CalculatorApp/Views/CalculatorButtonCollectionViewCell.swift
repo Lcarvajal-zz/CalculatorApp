@@ -11,6 +11,7 @@ import UIKit
 class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     private let buttonBackgroundView: UIView = {
         let view = UIView()
+        view.clipsToBounds = true
         return view
     }()
     
@@ -43,6 +44,7 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
         backgroundColor = .black
         
         addSubview(buttonBackgroundView)
+        buttonBackgroundView.layer.cornerRadius = (frame.width - 10) / 2
         buttonBackgroundView.addSubview(numberLabel)
         
         configureConstraints()
