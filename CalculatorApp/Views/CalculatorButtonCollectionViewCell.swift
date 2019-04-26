@@ -9,25 +9,15 @@
 import UIKit
 
 class CalculatorButtonCollectionViewCell: UICollectionViewCell {
-    private let buttonBackgroundView: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    private let numberLabel: UILabel = {
-        let label = UILabel()
+    private let button: UIButton = {
+        let button = UIButton()
+        button.clipsToBounds = true
         
-        label.text = "0"
-        label.textColor = .white
-        label.textAlignment = .center
         
-        label.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
-        label.adjustsFontSizeToFitWidth = true
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .regular)
         
-        label.numberOfLines = 1
-        
-        return label
+        return button
     }()
     
     override init(frame: CGRect) {
@@ -43,9 +33,8 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     private func commonInit() {
         backgroundColor = .black
         
-        addSubview(buttonBackgroundView)
-        buttonBackgroundView.layer.cornerRadius = (frame.width - 10) / 2
-        buttonBackgroundView.addSubview(numberLabel)
+        addSubview(button)
+        button.layer.cornerRadius = (frame.width - 10) / 2
         
         configureConstraints()
     }
@@ -53,68 +42,45 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     // MARK: - Styling
     
     internal func styleLight(for numberString: String) {
-        numberLabel.text = numberString
-        styleButton(with: .gray)
+        button.setTitle(numberString, for: .normal)
+        button.backgroundColor = .lightGray
     }
     
     internal func styleBright(for operatorString: String) {
-        numberLabel.text = operatorString
-        styleButton(with: .orange)
+        button.setTitle(operatorString, for: .normal)
+        button.backgroundColor = .orange
     }
     
     internal func styleDark(for operatorString: String) {
-        numberLabel.text = operatorString
-        styleButton(with: .darkGray)
-    }
-    
-    private func styleButton(with color: UIColor) {
-        buttonBackgroundView.backgroundColor = color
-        numberLabel.backgroundColor = color
+        button.setTitle(operatorString, for: .normal)
+        button.backgroundColor = .darkGray
     }
     
     // MARK: - Constraints
     
     private func configureConstraints() {
-        buttonBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        numberLabel.translatesAutoresizingMaskIntoConstraints = false
+        button.translatesAutoresizingMaskIntoConstraints = false
         
         let views: [String: Any] = [
-            "buttonBackgroundView": buttonBackgroundView,
-            "numberLabel": numberLabel
+            "button": button
         ]
         var constraints: [NSLayoutConstraint] = []
         
         // Centers orange background in cell
         
         let buttonBackgroundHorizontalConstraint = NSLayoutConstraint.constraints(
-            withVisualFormat: "|-5-[buttonBackgroundView]-5-|",
+            withVisualFormat: "|-5-[button]-5-|",
             options: [],
             metrics: nil,
             views: views)
         constraints += buttonBackgroundHorizontalConstraint
         
         let buttonBackgroundVerticalConstraint = NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-5-[buttonBackgroundView]-5-|",
+            withVisualFormat: "V:|-5-[button]-5-|",
             options: [],
             metrics: nil,
             views: views)
         constraints += buttonBackgroundVerticalConstraint
-        
-        // Centers label for button number in orange background
-        
-        let numberLabelHorizontalConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "|-1-[numberLabel]-1-|",
-            options: [],
-            metrics: nil,
-            views: views)
-        constraints += numberLabelHorizontalConstraints
-        
-        let numberLabelVerticalConstraints = NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-1-[numberLabel]-1-|",
-            options: .alignAllCenterY,
-            metrics: nil,
-            views: views)
-        constraints += numberLabelVerticalConstraints
         
         NSLayoutConstraint.activate(constraints)
     }
