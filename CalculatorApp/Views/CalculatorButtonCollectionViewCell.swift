@@ -14,7 +14,6 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
         button.clipsToBounds = true
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .regular)
-        
         return button
     }()
     
@@ -39,18 +38,18 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Styling
     
-    internal func styleLight(for numberString: String) {
-        button.setTitle(numberString, for: .normal)
+    internal func styleLight(_ buttonCharacter: String) {
+        button.setTitle(buttonCharacter, for: .normal)
         button.backgroundColor = .lightGray
     }
     
-    internal func styleBright(for operatorString: String) {
-        button.setTitle(operatorString, for: .normal)
+    internal func styleBright(_ buttonCharacter: String) {
+        button.setTitle(buttonCharacter, for: .normal)
         button.backgroundColor = .orange
     }
     
-    internal func styleDark(for operatorString: String) {
-        button.setTitle(operatorString, for: .normal)
+    internal func styleDark(_ buttonCharacter: String) {
+        button.setTitle(buttonCharacter, for: .normal)
         button.backgroundColor = .darkGray
     }
     

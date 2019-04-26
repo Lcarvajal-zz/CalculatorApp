@@ -97,12 +97,24 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         let calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalculatorButtonCollectionViewCell
         
         switch indexPath.row {
-        case 0, 1, 2:
-            calculatorButtonCell.styleDark(for: "C")
-        case 3, 7, 11, 15, 19:
-            calculatorButtonCell.styleBright(for: "÷")
+        case 0:
+            calculatorButtonCell.styleDark("C")
+        case 1:
+            calculatorButtonCell.styleDark("+/-")
+        case 2:
+            calculatorButtonCell.styleDark("%")
+        case 3:
+            calculatorButtonCell.styleBright("÷")
+        case 7:
+            calculatorButtonCell.styleBright("x")
+        case 11:
+            calculatorButtonCell.styleBright("-")
+        case 15:
+            calculatorButtonCell.styleBright("+")
+        case 19:
+            calculatorButtonCell.styleBright("=")
         default:
-            calculatorButtonCell.styleLight(for: "1")
+            calculatorButtonCell.styleLight("1")
         }
         
         return calculatorButtonCell
