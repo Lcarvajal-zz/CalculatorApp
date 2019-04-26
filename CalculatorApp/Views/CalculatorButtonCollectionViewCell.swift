@@ -11,7 +11,6 @@ import UIKit
 class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     private let buttonBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .orange
         return view
     }()
     
@@ -25,7 +24,6 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
         
-        label.backgroundColor = .orange
         label.numberOfLines = 1
         
         return label
@@ -48,6 +46,28 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
         buttonBackgroundView.addSubview(numberLabel)
         
         configureConstraints()
+    }
+    
+    // MARK: - Styling
+    
+    internal func styleLight(for numberString: String) {
+        numberLabel.text = numberString
+        styleButton(with: .gray)
+    }
+    
+    internal func styleBright(for operatorString: String) {
+        numberLabel.text = operatorString
+        styleButton(with: .orange)
+    }
+    
+    internal func styleDark(for operatorString: String) {
+        numberLabel.text = operatorString
+        styleButton(with: .darkGray)
+    }
+    
+    private func styleButton(with color: UIColor) {
+        buttonBackgroundView.backgroundColor = color
+        numberLabel.backgroundColor = color
     }
     
     // MARK: - Constraints

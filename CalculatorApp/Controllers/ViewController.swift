@@ -94,8 +94,18 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalculatorButtonCollectionViewCell
-        return cell
+        let calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalculatorButtonCollectionViewCell
+        
+        switch indexPath.row {
+        case 0, 1, 2:
+            calculatorButtonCell.styleDark(for: "C")
+        case 3, 7, 11, 15, 19:
+            calculatorButtonCell.styleBright(for: "÷")
+        default:
+            calculatorButtonCell.styleLight(for: "1")
+        }
+        
+        return calculatorButtonCell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
