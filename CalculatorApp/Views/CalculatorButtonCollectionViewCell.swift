@@ -12,8 +12,6 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     private let button: UIButton = {
         let button = UIButton()
         button.clipsToBounds = true
-        
-        
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .regular)
         
