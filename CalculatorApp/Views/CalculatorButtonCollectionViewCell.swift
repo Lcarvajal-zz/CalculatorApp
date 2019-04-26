@@ -9,6 +9,28 @@
 import UIKit
 
 class CalculatorButtonCollectionViewCell: UICollectionViewCell {
+    private let buttonBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .orange
+        return view
+    }()
+    
+    private let numberLabel: UILabel = {
+        let label = UILabel()
+        
+        label.text = "0"
+        label.textColor = .white
+        label.textAlignment = .center
+        
+        label.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
+        label.adjustsFontSizeToFitWidth = true
+        
+        label.backgroundColor = .orange
+        label.numberOfLines = 1
+        
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -22,31 +44,55 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     private func commonInit() {
         backgroundColor = .black
         
-        let button = UIView()
-        button.backgroundColor = .orange
-        addSubview(button)
+        addSubview(buttonBackgroundView)
+        buttonBackgroundView.addSubview(numberLabel)
         
-        button.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraints()
+    }
+    
+    // MARK: - Constraints
+    
+    private func configureConstraints() {
+        buttonBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        numberLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let views: [String: Any] = [
-            "button": button
+            "buttonBackgroundView": buttonBackgroundView,
+            "numberLabel": numberLabel
         ]
         var constraints: [NSLayoutConstraint] = []
         
-        let horizontalButtonConstraint = NSLayoutConstraint.constraints(
-            withVisualFormat: "|-5-[button]-5-|",
+        // Centers orange background in cell
+        
+        let buttonBackgroundHorizontalConstraint = NSLayoutConstraint.constraints(
+            withVisualFormat: "|-5-[buttonBackgroundView]-5-|",
             options: [],
             metrics: nil,
             views: views)
-        constraints += horizontalButtonConstraint
+        constraints += buttonBackgroundHorizontalConstraint
         
-        let verticalButtonConstraint = NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-5-[button]-5-|",
+        let buttonBackgroundVerticalConstraint = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-5-[buttonBackgroundView]-5-|",
             options: [],
             metrics: nil,
             views: views)
-        constraints += verticalButtonConstraint
+        constraints += buttonBackgroundVerticalConstraint
         
+        // Centers label for button number in orange background
+        
+        let numberLabelHorizontalConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "|-1-[numberLabel]-1-|",
+            options: [],
+            metrics: nil,
+            views: views)
+        constraints += numberLabelHorizontalConstraints
+        
+        let numberLabelVerticalConstraints = NSLayoutConstraint.constraints(
+            withVisualFormat: "V:|-1-[numberLabel]-1-|",
+            options: .alignAllCenterY,
+            metrics: nil,
+            views: views)
+        constraints += numberLabelVerticalConstraints
         
         NSLayoutConstraint.activate(constraints)
     }
