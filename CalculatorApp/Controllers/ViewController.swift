@@ -71,7 +71,7 @@ class ViewController: UIViewController {
             if text != "." {
                 outputLabel.text = text
             }
-            else if !outputLabel.text!.contains(".") {
+             else if !outputLabel.text!.contains(".") {
                 outputLabel.text = "0."
             }
             

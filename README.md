@@ -12,6 +12,18 @@ Portable, electronic, arithmetic; this, is the calculator app.
 2. Open with Xcode.
 3. Run and start calculating!
 
+## Todo
+
+- [x] Build basic UI
+- [x] Get addition, subtraction, multiplication and division to work
+- [ ] Refactor giant mess I made and set up proper tests
+- [ ] Write UI tests
+- [ ] Update UI with to closer resemble a finished calculator
+- [ ] Fix issue with doubles arithmatic and prevent creating ginormous numbers
+- [ ] Support landscape mode
+- [ ] Try converting app to MVVM
+
+
 ## Credits
 
 My fans inspire me to work hard and build beautiful things for the future.
