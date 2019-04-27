@@ -72,6 +72,10 @@ class ViewController: UIViewController {
     }
     
     @objc internal func tapOperator(sender: UIButton) {
+        if let outputText = outputLabel.text,
+            let outputNumber = Double(outputText) {
+            calculator.firstOperand = outputNumber
+        }
         outputLabel.text = calculator.calculateAndGetResult()
         
         // FIXME: Tapping operator not implemented

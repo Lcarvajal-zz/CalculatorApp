@@ -10,38 +10,41 @@ import Foundation
 
 
 struct Calculator {
-    internal var firstOperand: Int
-    internal var secondOperand: Int
+    internal var firstOperand: Double
+    internal var secondOperand: Double?
     internal var selectedOperator: Operator
     
     init() {
         firstOperand = 0
-        secondOperand = 0
         selectedOperator = .none
     }
     
     internal mutating func resetOperands() {
         firstOperand = 0
-        secondOperand = 0
+        secondOperand = nil
         selectedOperator = .none
     }
     
-    internal mutating func calculateAndGetResult() -> String {
-        let result: Int?
+    internal mutating func calculateAndGetResult() -> String? {
+        guard let existingSecondOperand = secondOperand else {
+            return nil
+        }
+        
+        let result: Double?
         
         switch selectedOperator {
         case .none:
             result = 0
             debugPrint("No operator selected for calculation")
         case .addition:
-            result = firstOperand + secondOperand
+            result = firstOperand + existingSecondOperand
         case .subtraction:
-            result = firstOperand - secondOperand
+            result = firstOperand - existingSecondOperand
         case .multiplication:
-            result = firstOperand * secondOperand
+            result = firstOperand * existingSecondOperand
         case .division:
-            if secondOperand != 0 {
-                result = firstOperand / secondOperand
+            if existingSecondOperand != 0 {
+                result = firstOperand / existingSecondOperand
             }
             else {
                 result = nil
@@ -51,8 +54,16 @@ struct Calculator {
         
         if let validResult = result {
             firstOperand = validResult
-            secondOperand = 0
-            return String(validResult)
+            secondOperand = nil
+            
+            // Handle decimal formatting
+            if (validResult - floor(validResult)) != 0 {
+                return String(validResult)
+            }
+            else {
+                let integerResult = Int(validResult)
+                return String(integerResult)
+            }
         }
         else {
             return "Not a number"

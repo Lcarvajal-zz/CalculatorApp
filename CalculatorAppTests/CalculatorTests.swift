@@ -55,6 +55,31 @@ class CalculatorTests: XCTestCase {
         calculator.selectedOperator = .division
         XCTAssertEqual(calculator.calculateAndGetResult(), "Not a number")
     }
+    
+    func testResultsWhenResultsContainDecimalsShouldReturnDecimals() {
+        calculator.firstOperand = 2.1
+        calculator.secondOperand = 2
+        
+        calculator.selectedOperator = .addition
+        XCTAssertEqual(calculator.calculateAndGetResult(), "4.1")
+        
+        calculator.firstOperand = 2.1
+        calculator.secondOperand = 2
+        calculator.selectedOperator = .subtraction
+        XCTAssertEqual(calculator.calculateAndGetResult(), "0.1")
+        
+        calculator.firstOperand = 2.1
+        calculator.secondOperand = 2
+        
+        calculator.selectedOperator = .multiplication
+        XCTAssertEqual(calculator.calculateAndGetResult(), "4.2")
+        
+        calculator.firstOperand = 2.1
+        calculator.secondOperand = 2
+        
+        calculator.selectedOperator = .division
+        XCTAssertEqual(calculator.calculateAndGetResult(), "1.05")
+    }
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
