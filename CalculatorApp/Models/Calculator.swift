@@ -11,63 +11,103 @@ import Foundation
 
 struct Calculator {
     internal var firstOperand: Double
-    internal var secondOperand: Double?
-    internal var selectedOperator: Operator
+    internal var currentOperator: Operator
     
     init() {
         firstOperand = 0
-        selectedOperator = .none
+        currentOperator = .none
     }
     
     internal mutating func resetOperands() {
         firstOperand = 0
-        secondOperand = nil
-        selectedOperator = .none
+        currentOperator = .none
     }
     
-    internal mutating func calculateAndGetResult() -> String? {
-        guard let existingSecondOperand = secondOperand else {
-            return nil
+    internal mutating func calculateAndGetResult(selectedOperator: Operator,
+                                                 secondOperand: Double) -> String? {
+        if currentOperator == .none {
+            firstOperand = secondOperand
+            
+            if selectedOperator != .equals {
+                currentOperator = selectedOperator
+                return "0"
+            }
+            else {
+                if (firstOperand - floor(firstOperand)) != 0 {
+                    return String(firstOperand)
+                }
+                else {
+                    let integerResult = Int(firstOperand)
+                    return String(integerResult)
+                }
+            }
         }
-        
+        else if currentOperator != .equals {
+            if let validResult = getResult(secondOperand: secondOperand) {
+                firstOperand = validResult
+                currentOperator = selectedOperator
+                
+                // Handle decimal formatting
+                if (validResult - floor(validResult)) != 0 {
+                    return String(validResult)
+                }
+                else {
+                    let integerResult = Int(validResult)
+                    return String(integerResult)
+                }
+            }
+            else {
+                resetOperands()
+                return "Not a number"
+            }
+        }
+        else {
+            if let validResult = getResult(secondOperand: secondOperand) {
+                firstOperand = validResult
+                currentOperator = selectedOperator
+                
+                // Handle decimal formatting
+                if (validResult - floor(validResult)) != 0 {
+                    return String(validResult)
+                }
+                else {
+                    let integerResult = Int(validResult)
+                    return String(integerResult)
+                }
+            }
+            else {
+                resetOperands()
+                return "Not a number"
+            }
+        }
+    }
+    
+    internal func getResult(secondOperand: Double) -> Double? {
         let result: Double?
         
-        switch selectedOperator {
+        switch currentOperator {
         case .none:
             result = 0
             debugPrint("No operator selected for calculation")
         case .addition:
-            result = firstOperand + existingSecondOperand
+            result = firstOperand + secondOperand
         case .subtraction:
-            result = firstOperand - existingSecondOperand
+            result = firstOperand - secondOperand
         case .multiplication:
-            result = firstOperand * existingSecondOperand
+            result = firstOperand * secondOperand
         case .division:
-            if existingSecondOperand != 0 {
-                result = firstOperand / existingSecondOperand
+            if secondOperand != 0 {
+                result = firstOperand / secondOperand
             }
             else {
                 result = nil
                 debugPrint("Attempting to divide by 0")
             }
+        case .equals:
+            result = 0
         }
         
-        if let validResult = result {
-            firstOperand = validResult
-            secondOperand = nil
-            
-            // Handle decimal formatting
-            if (validResult - floor(validResult)) != 0 {
-                return String(validResult)
-            }
-            else {
-                let integerResult = Int(validResult)
-                return String(integerResult)
-            }
-        }
-        else {
-            return "Not a number"
-        }
+        return result
     }
 }
 
@@ -77,4 +117,5 @@ enum Operator {
     case subtraction
     case multiplication
     case division
+    case equals
 }
