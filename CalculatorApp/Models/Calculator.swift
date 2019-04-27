@@ -27,22 +27,13 @@ struct Calculator {
     
     internal mutating func calculateAndGetResult(selectedOperator: Operator,
                                                  selectedOperand: Double) -> String {
-        
-        if lastOperator == .none {
+        switch lastOperator {
+        case .none:
             currentResult = selectedOperand
-            
-            if selectedOperator != .equals {
-                lastOperator = selectedOperator
-                return "0"
-            }
-            else {
-                return getFormattedCurrentResult()
-            }
-        }
-        else if lastOperator != .equals {
+            return getResultForNoLastOperatorSet(selectedOperator: selectedOperator)
+        case .equals:
             if let validResult = getResult(selectedOperand: selectedOperand) {
                 currentResult = validResult
-                lastOperator = selectedOperator
                 
                 return getFormattedCurrentResult()
             }
@@ -50,8 +41,7 @@ struct Calculator {
                 resetOperands()
                 return "Not a number"
             }
-        }
-        else {
+        default:
             if let validResult = getResult(selectedOperand: selectedOperand) {
                 currentResult = validResult
                 lastOperator = selectedOperator
@@ -65,7 +55,19 @@ struct Calculator {
         }
     }
     
-    internal func getResult(selectedOperand: Double) -> Double? {
+    fileprivate mutating func getResultForNoLastOperatorSet(selectedOperator: Operator) -> String {
+        switch selectedOperator {
+        case .equals:
+            return getFormattedCurrentResult()
+        default:
+            lastOperator = selectedOperator
+            return "0"
+        }
+    }
+    
+    // MARK: - Calculations
+    
+    fileprivate func getResult(selectedOperand: Double) -> Double? {
         let result: Double?
         
         switch lastOperator {
@@ -87,13 +89,14 @@ struct Calculator {
                 debugPrint("Attempting to divide by 0")
             }
         case .equals:
-            result = 0
+            result = nil
+            debugPrint("Attempting to use the equality operator in the incorrect manner")
         }
         
         return result
     }
     
-    private func getFormattedCurrentResult() -> String {
+    fileprivate func getFormattedCurrentResult() -> String {
         if (currentResult - floor(currentResult)) != 0 {
             return String(currentResult)
         }
