@@ -77,6 +77,11 @@ class ViewController: UIViewController {
             outputLabel.text = calculator.calculateAndGetResult(selectedOperator: .add, selectedOperand: outputNumber)
         }
     }
+    
+    @objc internal func tapSpecial(sender: UIButton) {
+        calculator.resetOperands()
+        outputLabel.text = "0"
+    }
 
     // MARK: - Constraints
     
@@ -136,6 +141,9 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         switch indexPath.row {
         case 0..<3:
             calculatorButtonCell.styleDark(buttonTexts[indexPath.row])
+            calculatorButtonCell.button.addTarget(self,
+                                                  action: #selector(ViewController.tapSpecial(sender:)),
+                                                  for: .touchUpInside)
         case 3, 7, 11, 15, 19:
             calculatorButtonCell.styleBright(buttonTexts[indexPath.row])
             calculatorButtonCell.button.addTarget(self,
