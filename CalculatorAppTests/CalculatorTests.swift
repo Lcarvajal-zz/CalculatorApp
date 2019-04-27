@@ -24,31 +24,36 @@ class CalculatorTests: XCTestCase {
     func testAddFiveWhenAnswerIsZeroShouldBeFive() {
         calculator.firstOperand = 0
         calculator.secondOperand = 5
-        XCTAssertEqual(calculator.sumToDisplay(), "5")
+        calculator.selectedOperator = .addition
+        XCTAssertEqual(calculator.calculateAndGetResult(), "5")
     }
     
     func testSubtractSixWhenAnswerIsTenShouldBeFour() {
         calculator.firstOperand = 10
         calculator.secondOperand = 6
-        XCTAssertEqual(calculator.differenceToDisplay(), "4")
+        calculator.selectedOperator = .subtraction
+        XCTAssertEqual(calculator.calculateAndGetResult(), "4")
     }
     
     func testMultiplyEightWhenAnswerIsEightShouldBeSixtyFour() {
         calculator.firstOperand = 8
         calculator.secondOperand = 8
-        XCTAssertEqual(calculator.productToDisplay(), "64")
+        calculator.selectedOperator = .multiplication
+        XCTAssertEqual(calculator.calculateAndGetResult(), "64")
     }
     
     func testDivideTenWhenAnswerIsOneHundredShouldBeTen() {
         calculator.firstOperand = 100
         calculator.secondOperand = 10
-        XCTAssertEqual(calculator.quotientToDisplay(), "10")
+        calculator.selectedOperator = .division
+        XCTAssertEqual(calculator.calculateAndGetResult(), "10")
     }
     
     func testDivideZeroWhenAnswerIsOneHundredShouldBeNotANumber() {
         calculator.firstOperand = 100
         calculator.secondOperand = 0
-        XCTAssertEqual(calculator.quotientToDisplay(), "Not a number")
+        calculator.selectedOperator = .division
+        XCTAssertEqual(calculator.calculateAndGetResult(), "Not a number")
     }
 
     func testPerformanceExample() {
