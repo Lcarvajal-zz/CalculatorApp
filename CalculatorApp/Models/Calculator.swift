@@ -26,7 +26,7 @@ struct Calculator {
     // FIXME: This messy code should be refactored into multiple functions
     
     internal mutating func calculateAndGetResult(selectedOperator: Operator,
-                                                 secondOperand: Double) -> String? {
+                                                 secondOperand: Double) -> String {
         if currentOperator == .none {
             firstOperand = secondOperand
             
