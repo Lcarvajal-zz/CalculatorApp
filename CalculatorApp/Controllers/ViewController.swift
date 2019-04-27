@@ -10,6 +10,14 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let buttonTexts = [
+        "C", "+/-", "%", "÷",
+        "7", "8", "9", "×",
+        "4", "5", "6", "-",
+        "1", "2", "3", "+",
+        "0", "0", ",", "="
+    ]
+    
     private let outputLabel =  NumberOutputLabel()
     private var buttonsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -97,24 +105,12 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         let calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalculatorButtonCollectionViewCell
         
         switch indexPath.row {
-        case 0:
-            calculatorButtonCell.styleDark("C")
-        case 1:
-            calculatorButtonCell.styleDark("+/-")
-        case 2:
-            calculatorButtonCell.styleDark("%")
-        case 3:
-            calculatorButtonCell.styleBright("÷")
-        case 7:
-            calculatorButtonCell.styleBright("x")
-        case 11:
-            calculatorButtonCell.styleBright("-")
-        case 15:
-            calculatorButtonCell.styleBright("+")
-        case 19:
-            calculatorButtonCell.styleBright("=")
+        case 0..<3:
+            calculatorButtonCell.styleDark(buttonTexts[indexPath.row])
+        case 3, 7, 11, 15, 19:
+            calculatorButtonCell.styleBright(buttonTexts[indexPath.row])
         default:
-            calculatorButtonCell.styleLight("1")
+            calculatorButtonCell.styleLight(buttonTexts[indexPath.row])
         }
         
         return calculatorButtonCell
