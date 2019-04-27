@@ -54,6 +54,10 @@ class ViewController: UIViewController {
     
     // MARK: - Actions
     
+    var operands: [Double] = []
+    var lastOperand: Double?
+    var replaceOutput = false
+    
     @objc internal func tapNumber(sender: UIButton) {
         guard let titleLabel = sender.titleLabel,
             let text = titleLabel.text,
@@ -62,7 +66,11 @@ class ViewController: UIViewController {
             return
         }
         
-        if outputLabel.text == "" || outputLabel.text == "0" {
+        if replaceOutput {
+            outputLabel.text = "\(number)"
+            replaceOutput = false
+        }
+        else if outputLabel.text == "" || outputLabel.text == "0" {
             outputLabel.text = text
         }
         else {
@@ -78,11 +86,33 @@ class ViewController: UIViewController {
             
             switch buttonTitleLabel.text {
             case "+":
-                calculator.operate(.add, outputNumber)
-                outputLabel.text = "0"
+                if !replaceOutput {
+                    operands.append(outputNumber)
+                    replaceOutput = true
+                    if operands.count > 1 {
+                        let sum = operands[0] + operands[1]
+                        outputLabel.text = "\(sum)"
+                        _ = operands.popLast()
+                        operands[0] = sum
+                        replaceOutput = true
+                    }
+                }
             case "=":
-                calculator.updateCurrentResult(for: outputNumber)
-                outputLabel.text = calculator.getFormattedCurrentResult()
+                if operands.count == 1,
+                    let existingLastOperand = lastOperand {
+                    let sum = operands[0] + existingLastOperand
+                    outputLabel.text = "\(sum)"
+                    operands[0] = sum
+                    replaceOutput = true
+                }
+                else if operands.count == 1 {
+                    operands.append(outputNumber)
+                    let sum = operands[0] + operands[1]
+                    outputLabel.text = "\(sum)"
+                    lastOperand = operands.popLast()
+                    operands[0] = sum
+                    replaceOutput = true
+                }
             default:
                 debugPrint("\(buttonTitleLabel.text) has not been configured")
             }

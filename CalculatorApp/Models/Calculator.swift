@@ -10,13 +10,13 @@ import Foundation
 
 
 struct Calculator {
-    fileprivate var needsToCalculateResult = false
-    
+    fileprivate var needsToCalculateResult: Bool
     fileprivate var lastOperator: Operator
     fileprivate var currentResult: Double
     fileprivate var operand: Double?
     
     init() {
+        needsToCalculateResult = false
         currentResult = 0
         operand = nil
         lastOperator = .none
@@ -26,6 +26,7 @@ struct Calculator {
         currentResult = 0
         operand = nil
         lastOperator = .none
+        needsToCalculateResult = false
     }
     
     internal mutating func updateCurrentResult(for outputNumber: Double) {
@@ -37,6 +38,10 @@ struct Calculator {
     }
     
     internal mutating func operate(_ newOperator: Operator, _ outputNumber: Double) {
+        debugPrint("Called with \(outputNumber)")
+        debugPrint(currentResult)
+        debugPrint(operand)
+        debugPrint(needsToCalculateResult)
         if needsToCalculateResult {
             updateCurrentResult(for: outputNumber)
         }

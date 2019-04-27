@@ -21,68 +21,28 @@ class CalculatorTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func testFirstOperationWhenOperatorIsNoneShouldBe0() {
+    func testCurrentResultWhenOperationsArePerformedConsecutively() {
         calculator.resetOperands()
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .add, newOperand: 5), "0")
+        calculator.operate(.add, 3)
+        calculator.operate(.add, 6)
+        XCTAssertEqual(calculator.getFormattedCurrentResult(), "9")
     }
     
-    func testEqualOperationWhenOperatorIsNotSetAndSecondOperantIsFiveShouldBeFive() {
+    func testCurrentResultWhenOneOperationIsPerformed() {
         calculator.resetOperands()
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .equals, newOperand: 5), "5")
+        calculator.operate(.add, 3)
+        calculator.updateCurrentResult(for: 0)
+        XCTAssertEqual(calculator.getFormattedCurrentResult(), "3")
     }
     
-    func testEqualOperationWhenLastOperatorIsSetToaddAndFirstOperandIsSetToFiveAndnewOperandIsFiveShouldBeTen() {
-        calculator.currentResult = 5
-        calculator.lastOperator = .add
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .equals, newOperand: 5), "10")
-    }
-    
-    func testAddFiveWhenAnswerIsZeroShouldBeFive() {
-        calculator.currentResult = 0
-        calculator.lastOperator = .add
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .add, newOperand: 5), "5")
-    }
-    
-    func testSubtractSixWhenAnswerIsTenShouldBeFour() {
-        calculator.currentResult = 10
-        calculator.lastOperator = .subtract
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .subtract, newOperand: 6), "4")
-    }
-    
-    func testMultiplyEightWhenAnswerIsEightShouldBeSixtyFour() {
-        calculator.currentResult = 8
-        calculator.lastOperator = .multiply
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .multiply, newOperand: 8), "64")
-    }
-    
-    func testDivideTenWhenAnswerIsOneHundredShouldBeTen() {
-        calculator.currentResult = 100
-        calculator.lastOperator = .divide
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .divide, newOperand: 10), "10")
-    }
-    
-    func testDivideZeroWhenAnswerIsOneHundredShouldBeNotANumber() {
-        calculator.currentResult = 100
-        calculator.lastOperator = .divide
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .divide, newOperand: 0), "Not a number")
-    }
-    
-    func testResultsWhenResultsContainDecimalsShouldReturnDecimals() {
-        calculator.currentResult = 2.1
-        calculator.lastOperator = .add
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .add, newOperand: 2), "4.1")
-        
-        calculator.currentResult = 2.1
-        calculator.lastOperator = .subtract
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .subtract, newOperand: 2), "0.1")
-        
-        calculator.currentResult = 2.1
-        calculator.lastOperator = .multiply
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .multiply, newOperand: 2), "4.2")
-        
-        calculator.currentResult = 2.1
-        calculator.lastOperator = .divide
-        XCTAssertEqual(calculator.calculateAndGetResult(selectedOperator: .divide, newOperand: 2), "1.05")
+    func testCurrentResultWhenMixingConsecutiveOperationsAndUpdatingCurrentResult() {
+        calculator.resetOperands()
+        calculator.operate(.add, 3)
+        calculator.updateCurrentResult(for: 0)
+        calculator.operate(.add, 6)
+        calculator.operate(.add, 15)
+        calculator.updateCurrentResult(for: 0)
+        XCTAssertEqual(calculator.getFormattedCurrentResult(), "24")
     }
 
     func testPerformanceExample() {
