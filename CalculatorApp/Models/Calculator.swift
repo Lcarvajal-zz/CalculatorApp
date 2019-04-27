@@ -10,44 +10,44 @@ import Foundation
 
 
 struct Calculator {
-    internal var firstOperand: Double
-    internal var currentOperator: Operator
+    internal var currentResult: Double
+    internal var lastOperator: Operator
     
     init() {
-        firstOperand = 0
-        currentOperator = .none
+        currentResult = 0
+        lastOperator = .none
     }
     
     internal mutating func resetOperands() {
-        firstOperand = 0
-        currentOperator = .none
+        currentResult = 0
+        lastOperator = .none
     }
     
     // FIXME: This messy code should be refactored into multiple functions
     
     internal mutating func calculateAndGetResult(selectedOperator: Operator,
                                                  secondOperand: Double) -> String {
-        if currentOperator == .none {
-            firstOperand = secondOperand
+        if lastOperator == .none {
+            currentResult = secondOperand
             
             if selectedOperator != .equals {
-                currentOperator = selectedOperator
+                lastOperator = selectedOperator
                 return "0"
             }
             else {
-                if (firstOperand - floor(firstOperand)) != 0 {
-                    return String(firstOperand)
+                if (currentResult - floor(currentResult)) != 0 {
+                    return String(currentResult)
                 }
                 else {
-                    let integerResult = Int(firstOperand)
+                    let integerResult = Int(currentResult)
                     return String(integerResult)
                 }
             }
         }
-        else if currentOperator != .equals {
+        else if lastOperator != .equals {
             if let validResult = getResult(secondOperand: secondOperand) {
-                firstOperand = validResult
-                currentOperator = selectedOperator
+                currentResult = validResult
+                lastOperator = selectedOperator
                 
                 // Handle decimal formatting
                 if (validResult - floor(validResult)) != 0 {
@@ -65,8 +65,8 @@ struct Calculator {
         }
         else {
             if let validResult = getResult(secondOperand: secondOperand) {
-                firstOperand = validResult
-                currentOperator = selectedOperator
+                currentResult = validResult
+                lastOperator = selectedOperator
                 
                 // Handle decimal formatting
                 if (validResult - floor(validResult)) != 0 {
@@ -87,19 +87,19 @@ struct Calculator {
     internal func getResult(secondOperand: Double) -> Double? {
         let result: Double?
         
-        switch currentOperator {
+        switch lastOperator {
         case .none:
             result = 0
             debugPrint("No operator selected for calculation")
         case .addition:
-            result = firstOperand + secondOperand
+            result = currentResult + secondOperand
         case .subtraction:
-            result = firstOperand - secondOperand
+            result = currentResult - secondOperand
         case .multiplication:
-            result = firstOperand * secondOperand
+            result = currentResult * secondOperand
         case .division:
             if secondOperand != 0 {
-                result = firstOperand / secondOperand
+                result = currentResult / secondOperand
             }
             else {
                 result = nil
