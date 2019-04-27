@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         "7", "8", "9", "×",
         "4", "5", "6", "-",
         "1", "2", "3", "+",
-        "0", "0", ",", "="
+        "0", "0", ".", "="
     ]
     
     private let outputLabel =  NumberOutputLabel()
@@ -61,23 +61,34 @@ class ViewController: UIViewController {
     
     @objc internal func tapNumber(sender: UIButton) {
         guard let titleLabel = sender.titleLabel,
-            let text = titleLabel.text,
-            let number = Int(text) else {
+            let text = titleLabel.text else {
             debugPrint("Attempting to tap button with no number set on calculator")
             return
         }
         
         lastOperand = nil
         if replaceOutput {
-            outputLabel.text = "\(number)"
+            if text != "." {
+                outputLabel.text = text
+            }
+            else if !outputLabel.text!.contains(".") {
+                outputLabel.text = "0."
+            }
+            
             replaceOutput = false
         }
         else if outputLabel.text == "" || outputLabel.text == "0" {
-            outputLabel.text = text
+            if text != "." {
+                outputLabel.text = text
+            }
+            else if !outputLabel.text!.contains(".") {
+                outputLabel.text = "0."
+            }
         }
         else {
-            // FIXME: Force unwrapping optional
-            outputLabel.text! += "\(number)"
+            if text != "." || !outputLabel.text!.contains(".") {
+                outputLabel.text! += text
+            }
         }
     }
 
