@@ -10,92 +10,71 @@ import Foundation
 
 
 struct Calculator {
-    internal var currentResult: Double
-    internal var lastOperator: Operator
+    fileprivate var needsToCalculateResult = false
+    
+    fileprivate var lastOperator: Operator
+    fileprivate var currentResult: Double
+    fileprivate var operand: Double?
     
     init() {
         currentResult = 0
+        operand = nil
         lastOperator = .none
     }
     
     internal mutating func resetOperands() {
         currentResult = 0
+        operand = nil
         lastOperator = .none
     }
     
-    internal mutating func calculateAndGetResult(selectedOperator: Operator,
-                                                 selectedOperand: Double) -> String {
-        switch lastOperator {
-        case .none:
-            currentResult = selectedOperand
-            return getResultWhenNoLastOperatorSet(selectedOperator: selectedOperator)
-        default:
-            return getResultWhenLastOperatorSet(selectedOperator: selectedOperator,
-                                                selectedOperand: selectedOperand)
+    internal mutating func updateCurrentResult(for outputNumber: Double) {
+        if operand == nil {
+            operand = outputNumber
         }
+        operateOnCurrentResultIfNeeded()
+        needsToCalculateResult = false
     }
     
-    // MARK: - Handling sequential operations
-    
-    fileprivate mutating func getResultWhenNoLastOperatorSet(selectedOperator: Operator) -> String {
-        switch selectedOperator {
-        case .equals:
-            return getFormattedCurrentResult()
-        default:
-            lastOperator = selectedOperator
-            return "0"
-        }
-    }
-    
-    fileprivate mutating func getResultWhenLastOperatorSet(selectedOperator: Operator,
-                                                           selectedOperand: Double) -> String {
-        if let validResult = getResult(selectedOperand: selectedOperand) {
-            currentResult = validResult
-            
-            if lastOperator != .equals {
-                lastOperator = selectedOperator
-            }
-            
-            return getFormattedCurrentResult()
+    internal mutating func operate(_ newOperator: Operator, _ outputNumber: Double) {
+        if needsToCalculateResult {
+            updateCurrentResult(for: outputNumber)
         }
         else {
-            resetOperands()
-            return "Not a number"
+            operateOnCurrentResultIfNeeded()
+            currentResult = outputNumber
+            lastOperator = newOperator
+            needsToCalculateResult = true
+            operand = nil
         }
     }
     
-    // MARK: - Calculations
-    
-    fileprivate func getResult(selectedOperand: Double) -> Double? {
-        let result: Double?
-        
+    internal mutating func operateOnCurrentResultIfNeeded() {
+        guard let secondOperand = operand else {
+            debugPrint("Second operand is nil")
+            return
+        }
         switch lastOperator {
         case .none:
-            result = 0
             debugPrint("No operator selected for calculation")
         case .add:
-            result = currentResult + selectedOperand
+            currentResult += secondOperand
         case .subtract:
-            result = currentResult - selectedOperand
+            currentResult -= secondOperand
         case .multiply:
-            result = currentResult * selectedOperand
+            currentResult *= secondOperand
         case .divide:
-            if selectedOperand != 0 {
-                result = currentResult / selectedOperand
+            if secondOperand != 0 {
+                currentResult = currentResult / secondOperand
             }
             else {
-                result = nil
+                currentResult = 0
                 debugPrint("Attempting to divide by 0")
             }
-        case .equals:
-            result = nil
-            debugPrint("Attempting to use the equality operator in the incorrect manner")
         }
-        
-        return result
     }
     
-    fileprivate func getFormattedCurrentResult() -> String {
+    internal func getFormattedCurrentResult() -> String {
         if (currentResult - floor(currentResult)) != 0 {
             return String(currentResult)
         }
@@ -112,5 +91,4 @@ enum Operator {
     case subtract
     case multiply
     case divide
-    case equals
 }

@@ -70,11 +70,22 @@ class ViewController: UIViewController {
             outputLabel.text! += "\(number)"
         }
     }
-    
+
     @objc internal func tapOperator(sender: UIButton) {
         if let outputText = outputLabel.text,
-            let outputNumber = Double(outputText) {
-            outputLabel.text = calculator.calculateAndGetResult(selectedOperator: .add, selectedOperand: outputNumber)
+            let outputNumber = Double(outputText),
+            let buttonTitleLabel = sender.titleLabel {
+            
+            switch buttonTitleLabel.text {
+            case "+":
+                calculator.operate(.add, outputNumber)
+                outputLabel.text = "0"
+            case "=":
+                calculator.updateCurrentResult(for: outputNumber)
+                outputLabel.text = calculator.getFormattedCurrentResult()
+            default:
+                debugPrint("\(buttonTitleLabel.text) has not been configured")
+            }
         }
     }
     
