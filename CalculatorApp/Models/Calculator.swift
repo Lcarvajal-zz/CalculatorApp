@@ -26,37 +26,25 @@ struct Calculator {
     // FIXME: This messy code should be refactored into multiple functions
     
     internal mutating func calculateAndGetResult(selectedOperator: Operator,
-                                                 secondOperand: Double) -> String {
+                                                 selectedOperand: Double) -> String {
+        
         if lastOperator == .none {
-            currentResult = secondOperand
+            currentResult = selectedOperand
             
             if selectedOperator != .equals {
                 lastOperator = selectedOperator
                 return "0"
             }
             else {
-                if (currentResult - floor(currentResult)) != 0 {
-                    return String(currentResult)
-                }
-                else {
-                    let integerResult = Int(currentResult)
-                    return String(integerResult)
-                }
+                return getFormattedCurrentResult()
             }
         }
         else if lastOperator != .equals {
-            if let validResult = getResult(secondOperand: secondOperand) {
+            if let validResult = getResult(selectedOperand: selectedOperand) {
                 currentResult = validResult
                 lastOperator = selectedOperator
                 
-                // Handle decimal formatting
-                if (validResult - floor(validResult)) != 0 {
-                    return String(validResult)
-                }
-                else {
-                    let integerResult = Int(validResult)
-                    return String(integerResult)
-                }
+                return getFormattedCurrentResult()
             }
             else {
                 resetOperands()
@@ -64,18 +52,11 @@ struct Calculator {
             }
         }
         else {
-            if let validResult = getResult(secondOperand: secondOperand) {
+            if let validResult = getResult(selectedOperand: selectedOperand) {
                 currentResult = validResult
                 lastOperator = selectedOperator
                 
-                // Handle decimal formatting
-                if (validResult - floor(validResult)) != 0 {
-                    return String(validResult)
-                }
-                else {
-                    let integerResult = Int(validResult)
-                    return String(integerResult)
-                }
+                return getFormattedCurrentResult()
             }
             else {
                 resetOperands()
@@ -84,7 +65,7 @@ struct Calculator {
         }
     }
     
-    internal func getResult(secondOperand: Double) -> Double? {
+    internal func getResult(selectedOperand: Double) -> Double? {
         let result: Double?
         
         switch lastOperator {
@@ -92,14 +73,14 @@ struct Calculator {
             result = 0
             debugPrint("No operator selected for calculation")
         case .add:
-            result = currentResult + secondOperand
+            result = currentResult + selectedOperand
         case .subtract:
-            result = currentResult - secondOperand
+            result = currentResult - selectedOperand
         case .multiply:
-            result = currentResult * secondOperand
+            result = currentResult * selectedOperand
         case .divide:
-            if secondOperand != 0 {
-                result = currentResult / secondOperand
+            if selectedOperand != 0 {
+                result = currentResult / selectedOperand
             }
             else {
                 result = nil
@@ -110,6 +91,16 @@ struct Calculator {
         }
         
         return result
+    }
+    
+    private func getFormattedCurrentResult() -> String {
+        if (currentResult - floor(currentResult)) != 0 {
+            return String(currentResult)
+        }
+        else {
+            let integerResult = Int(currentResult)
+            return String(integerResult)
+        }
     }
 }
 
