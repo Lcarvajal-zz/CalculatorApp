@@ -9,7 +9,7 @@
 import UIKit
 
 class CalculatorButtonCollectionViewCell: UICollectionViewCell {
-    private let button: UIButton = {
+    internal let button: UIButton = {
         let button = UIButton()
         button.clipsToBounds = true
         button.setTitleColor(.white, for: .normal)

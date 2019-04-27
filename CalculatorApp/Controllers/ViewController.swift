@@ -51,6 +51,25 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    // MARK: - Actions
+    
+    @objc internal func tapNumber(sender: UIButton) {
+        guard let titleLabel = sender.titleLabel,
+            let text = titleLabel.text,
+            let number = Int(text) else {
+            debugPrint("Attempting to tap button with no number set on calculator")
+            return
+        }
+        
+        if outputLabel.text == "" || outputLabel.text == "0" {
+            outputLabel.text = text
+        }
+        else {
+            // FIXME: Force unwrapping optional
+            outputLabel.text! += "\(number)"
+        }
+    }
 
     // MARK: - Constraints
     
@@ -97,12 +116,15 @@ class ViewController: UIViewController {
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         return 20
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalculatorButtonCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
+                                                                      for: indexPath) as! CalculatorButtonCollectionViewCell
         
         switch indexPath.row {
         case 0..<3:
@@ -111,16 +133,21 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
             calculatorButtonCell.styleBright(buttonTexts[indexPath.row])
         default:
             calculatorButtonCell.styleLight(buttonTexts[indexPath.row])
+            calculatorButtonCell.button.addTarget(self,
+                                                  action: #selector(ViewController.tapNumber(sender:)),
+                                                  for: .touchUpInside)
         }
         
         return calculatorButtonCell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let oneFourthOfScreenWidth = collectionView.frame.width / 4
+        
         let size = CGSize(width: oneFourthOfScreenWidth,
                           height: oneFourthOfScreenWidth)
-        
         return size
     }
     
