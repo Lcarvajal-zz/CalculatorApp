@@ -23,45 +23,44 @@ struct Calculator {
         lastOperator = .none
     }
     
-    // FIXME: This messy code should be refactored into multiple functions
-    
     internal mutating func calculateAndGetResult(selectedOperator: Operator,
                                                  selectedOperand: Double) -> String {
         switch lastOperator {
         case .none:
             currentResult = selectedOperand
-            return getResultForNoLastOperatorSet(selectedOperator: selectedOperator)
-        case .equals:
-            if let validResult = getResult(selectedOperand: selectedOperand) {
-                currentResult = validResult
-                
-                return getFormattedCurrentResult()
-            }
-            else {
-                resetOperands()
-                return "Not a number"
-            }
+            return getResultWhenNoLastOperatorSet(selectedOperator: selectedOperator)
         default:
-            if let validResult = getResult(selectedOperand: selectedOperand) {
-                currentResult = validResult
-                lastOperator = selectedOperator
-                
-                return getFormattedCurrentResult()
-            }
-            else {
-                resetOperands()
-                return "Not a number"
-            }
+            return getResultWhenLastOperatorSet(selectedOperator: selectedOperator,
+                                                selectedOperand: selectedOperand)
         }
     }
     
-    fileprivate mutating func getResultForNoLastOperatorSet(selectedOperator: Operator) -> String {
+    // MARK: - Handling sequential operations
+    
+    fileprivate mutating func getResultWhenNoLastOperatorSet(selectedOperator: Operator) -> String {
         switch selectedOperator {
         case .equals:
             return getFormattedCurrentResult()
         default:
             lastOperator = selectedOperator
             return "0"
+        }
+    }
+    
+    fileprivate mutating func getResultWhenLastOperatorSet(selectedOperator: Operator,
+                                                           selectedOperand: Double) -> String {
+        if let validResult = getResult(selectedOperand: selectedOperand) {
+            currentResult = validResult
+            
+            if lastOperator != .equals {
+                lastOperator = selectedOperator
+            }
+            
+            return getFormattedCurrentResult()
+        }
+        else {
+            resetOperands()
+            return "Not a number"
         }
     }
     
