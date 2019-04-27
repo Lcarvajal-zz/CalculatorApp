@@ -27,23 +27,36 @@ struct Calculator {
     }
     
     internal mutating func calculateAndGetResult() -> String {
-        let result: String
+        let result: Int?
         
         switch selectedOperator {
         case .none:
+            result = 0
             debugPrint("No operator selected for calculation")
-            result = "Invalid"
         case .addition:
-            result = String(firstOperand + secondOperand)
+            result = firstOperand + secondOperand
         case .subtraction:
-            result = String(firstOperand - secondOperand)
+            result = firstOperand - secondOperand
         case .multiplication:
-            result = String(firstOperand * secondOperand)
+            result = firstOperand * secondOperand
         case .division:
-            result = String(firstOperand / secondOperand)
+            if secondOperand != 0 {
+                result = firstOperand / secondOperand
+            }
+            else {
+                result = nil
+                debugPrint("Attempting to divide by 0")
+            }
         }
         
-        return result
+        if let validResult = result {
+            firstOperand = validResult
+            secondOperand = 0
+            return String(validResult)
+        }
+        else {
+            return "Not a number"
+        }
     }
     
     // Operations
