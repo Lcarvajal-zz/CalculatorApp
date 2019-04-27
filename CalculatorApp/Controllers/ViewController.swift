@@ -56,6 +56,7 @@ class ViewController: UIViewController {
     
     var operands: [Double] = []
     var lastOperand: Double?
+    var lastOperator: Operator?
     var replaceOutput = false
     
     @objc internal func tapNumber(sender: UIButton) {
@@ -66,6 +67,7 @@ class ViewController: UIViewController {
             return
         }
         
+        lastOperand = nil
         if replaceOutput {
             outputLabel.text = "\(number)"
             replaceOutput = false
@@ -87,32 +89,32 @@ class ViewController: UIViewController {
             switch buttonTitleLabel.text {
             case "+":
                 if !replaceOutput {
+                    lastOperator = .add
+                    
                     operands.append(outputNumber)
                     replaceOutput = true
                     if operands.count > 1 {
                         let sum = operands[0] + operands[1]
                         outputLabel.text = "\(sum)"
-                        _ = operands.popLast()
+                        lastOperand = operands.popLast()
                         operands[0] = sum
-                        replaceOutput = true
                     }
                 }
             case "=":
-                if operands.count == 1,
-                    let existingLastOperand = lastOperand {
-                    let sum = operands[0] + existingLastOperand
-                    outputLabel.text = "\(sum)"
-                    operands[0] = sum
+                if operands.count == 1 {
+
+                    if let existingLastOperand = lastOperand {
+                        operands[0] += existingLastOperand
+                    }
+                    else {
+                        operands[0] += outputNumber
+                        lastOperand = outputNumber
+                    }
+                    
+                    outputLabel.text = "\(operands[0])"
                     replaceOutput = true
                 }
-                else if operands.count == 1 {
-                    operands.append(outputNumber)
-                    let sum = operands[0] + operands[1]
-                    outputLabel.text = "\(sum)"
-                    lastOperand = operands.popLast()
-                    operands[0] = sum
-                    replaceOutput = true
-                }
+                
             default:
                 debugPrint("\(buttonTitleLabel.text) has not been configured")
             }
@@ -120,7 +122,10 @@ class ViewController: UIViewController {
     }
     
     @objc internal func tapSpecial(sender: UIButton) {
-        calculator.resetOperands()
+        operands = []
+        lastOperand = nil
+        lastOperator = nil
+        replaceOutput = false
         outputLabel.text = "0"
     }
 
