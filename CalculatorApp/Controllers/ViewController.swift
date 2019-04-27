@@ -70,6 +70,22 @@ class ViewController: UIViewController {
             outputLabel.text! += "\(number)"
         }
     }
+    
+    @objc internal func tapOperator(sender: UIButton) {
+        guard let titleLabel = sender.titleLabel,
+            let text = titleLabel.text else {
+                debugPrint("Attempting to tap button with no operator text")
+                return
+        }
+        
+        if outputLabel.text == "" || outputLabel.text == "0" {
+            outputLabel.text = text
+        }
+        else {
+            // FIXME: Force unwrapping optional
+            outputLabel.text! += "\(number)"
+        }
+    }
 
     // MARK: - Constraints
     

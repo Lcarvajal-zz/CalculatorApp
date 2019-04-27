@@ -10,12 +10,40 @@ import Foundation
 
 
 struct Calculator {
-    internal var firstOperand = 0;
-    internal var secondOperand = 0;
+    internal var firstOperand: Int
+    internal var secondOperand: Int
+    internal var selectedOperator: Operator
+    
+    init() {
+        firstOperand = 0
+        secondOperand = 0
+        selectedOperator = .none
+    }
     
     internal mutating func resetOperands() {
-        firstOperand = 0;
-        secondOperand = 0;
+        firstOperand = 0
+        secondOperand = 0
+        selectedOperator = .none
+    }
+    
+    internal mutating func calculateAndGetResult() -> String {
+        let result: String
+        
+        switch selectedOperator {
+        case .none:
+            debugPrint("No operator selected for calculation")
+            result = "Invalid"
+        case .addition:
+            result = String(firstOperand + secondOperand)
+        case .subtraction:
+            result = String(firstOperand - secondOperand)
+        case .multiplication:
+            result = String(firstOperand * secondOperand)
+        case .division:
+            result = String(firstOperand / secondOperand)
+        }
+        
+        return result
     }
     
     // Operations
@@ -46,4 +74,12 @@ struct Calculator {
             return "Not a number"
         }
     }
+}
+
+enum Operator {
+    case none
+    case addition
+    case subtraction
+    case multiplication
+    case division
 }
