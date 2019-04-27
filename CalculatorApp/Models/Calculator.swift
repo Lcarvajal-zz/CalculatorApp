@@ -91,13 +91,13 @@ struct Calculator {
         case .none:
             result = 0
             debugPrint("No operator selected for calculation")
-        case .addition:
+        case .add:
             result = currentResult + secondOperand
-        case .subtraction:
+        case .subtract:
             result = currentResult - secondOperand
-        case .multiplication:
+        case .multiply:
             result = currentResult * secondOperand
-        case .division:
+        case .divide:
             if secondOperand != 0 {
                 result = currentResult / secondOperand
             }
@@ -115,9 +115,9 @@ struct Calculator {
 
 enum Operator {
     case none
-    case addition
-    case subtraction
-    case multiplication
-    case division
+    case add
+    case subtract
+    case multiply
+    case divide
     case equals
 }

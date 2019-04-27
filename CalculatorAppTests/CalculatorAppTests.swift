@@ -24,7 +24,7 @@ class CalculatorAppTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-    func testAdditionWith3and5ShouldEqual8() {
+    func testaddWith3and5ShouldEqual8() {
         
     }
 

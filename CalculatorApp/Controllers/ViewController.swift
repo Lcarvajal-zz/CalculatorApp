@@ -74,7 +74,7 @@ class ViewController: UIViewController {
     @objc internal func tapOperator(sender: UIButton) {
         if let outputText = outputLabel.text,
             let outputNumber = Double(outputText) {
-            outputLabel.text = calculator.calculateAndGetResult(selectedOperator: .addition, secondOperand: outputNumber)
+            outputLabel.text = calculator.calculateAndGetResult(selectedOperator: .add, secondOperand: outputNumber)
         }
     }
 
