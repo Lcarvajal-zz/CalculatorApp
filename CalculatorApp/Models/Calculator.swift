@@ -58,35 +58,6 @@ struct Calculator {
             return "Not a number"
         }
     }
-    
-    // Operations
-    
-    internal mutating func sumToDisplay() -> String {
-        firstOperand += secondOperand
-        return "\(firstOperand)"
-    }
-    
-    internal mutating func differenceToDisplay() -> String {
-        firstOperand -= secondOperand
-        return "\(firstOperand)"
-    }
-    
-    internal mutating func productToDisplay() -> String {
-        firstOperand *= secondOperand
-        return "\(firstOperand)"
-    }
-    
-    internal mutating func quotientToDisplay() -> String {
-        if secondOperand != 0 {
-            firstOperand /= secondOperand
-            return "\(firstOperand)"
-        }
-        else {
-            firstOperand = 0
-            secondOperand = 0
-            return "Not a number"
-        }
-    }
 }
 
 enum Operator {
