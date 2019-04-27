@@ -82,42 +82,91 @@ class ViewController: UIViewController {
     }
 
     @objc internal func tapOperator(sender: UIButton) {
-        if let outputText = outputLabel.text,
-            let outputNumber = Double(outputText),
-            let buttonTitleLabel = sender.titleLabel {
+        if let buttonTitleLabel = sender.titleLabel {
             
             switch buttonTitleLabel.text {
             case "+":
-                if !replaceOutput {
-                    lastOperator = .add
-                    
-                    operands.append(outputNumber)
-                    replaceOutput = true
-                    if operands.count > 1 {
-                        let sum = operands[0] + operands[1]
-                        outputLabel.text = "\(sum)"
-                        lastOperand = operands.popLast()
-                        operands[0] = sum
-                    }
-                }
+                handleOperator(currentOperator: .add)
+            case "-":
+                handleOperator(currentOperator: .subtract)
+            case "×":
+                handleOperator(currentOperator: .multiply)
+            case "÷":
+                handleOperator(currentOperator: .divide)
             case "=":
-                if operands.count == 1 {
-
-                    if let existingLastOperand = lastOperand {
-                        operands[0] += existingLastOperand
-                    }
-                    else {
-                        operands[0] += outputNumber
-                        lastOperand = outputNumber
-                    }
-                    
-                    outputLabel.text = "\(operands[0])"
-                    replaceOutput = true
-                }
-                
+                handleEqualityOperator()
             default:
                 debugPrint("\(buttonTitleLabel.text) has not been configured")
             }
+        }
+    }
+    
+    internal func handleOperator(currentOperator: Operator) {
+        if lastOperator != currentOperator {
+            lastOperator = currentOperator
+            lastOperand = nil
+        }
+        
+        if let outputText = outputLabel.text,
+            let outputNumber = Double(outputText),
+            !replaceOutput {
+            lastOperator = currentOperator
+            
+            operands.append(outputNumber)
+            replaceOutput = true
+            if operands.count > 1 {
+                let result = performOperation(currentOperator,
+                                              firstOperand: operands[0],
+                                              secondOperand: operands[1])
+                outputLabel.text = "\(result)"
+                lastOperand = operands.popLast()
+                operands[0] = result
+            }
+        }
+    }
+    
+    internal func performOperation(_ currentOperator: Operator,
+                                   firstOperand: Double,
+                                   secondOperand: Double) -> Double {
+        switch currentOperator {
+        case .add:
+            return firstOperand + secondOperand
+        case .subtract:
+            return firstOperand - secondOperand
+        case .multiply:
+            return firstOperand * secondOperand
+        case .divide:
+            if secondOperand != 0 {
+                return firstOperand / secondOperand
+            }
+            else {
+                return firstOperand
+            }
+        default:
+            return 0
+        }
+    }
+    
+    internal func handleEqualityOperator() {
+        if let outputText = outputLabel.text,
+            let outputNumber = Double(outputText),
+            let existingLastOperator = lastOperator,
+            operands.count == 1 {
+
+            if let existingLastOperand = lastOperand {
+                operands[0] = performOperation(existingLastOperator,
+                                               firstOperand: operands[0],
+                                               secondOperand: existingLastOperand)
+            }
+            else {
+                operands[0] = performOperation(existingLastOperator,
+                                               firstOperand: operands[0],
+                                               secondOperand: outputNumber)
+                lastOperand = outputNumber
+            }
+            
+            outputLabel.text = "\(operands[0])"
+            replaceOutput = true
         }
     }
     
