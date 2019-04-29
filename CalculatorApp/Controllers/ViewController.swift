@@ -116,12 +116,10 @@ class ViewController: UIViewController {
 
         if let existingLastOperand = calculator.lastOperand {
             calculator.performOperation(existingLastOperator,
-                                        firstOperand: calculator.operands[0],
                                         secondOperand: existingLastOperand)
         }
         else {
             calculator.performOperation(existingLastOperator,
-                                        firstOperand: calculator.operands[0],
                                         secondOperand: outputNumber)
             calculator.lastOperand = outputNumber
         }
@@ -150,10 +148,10 @@ class ViewController: UIViewController {
             
             if calculator.operands.count > 1 {
                 calculator.performOperation(currentOperator,
-                                 firstOperand: calculator.operands[0],
                                  secondOperand: calculator.operands[1])
-                outputLabel.text = calculator.getFirstFormattedOperand()
+                
                 calculator.lastOperand = calculator.operands.popLast()
+                outputLabel.text = calculator.getFirstFormattedOperand()
             }
         }
     }

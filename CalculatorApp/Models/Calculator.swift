@@ -10,6 +10,8 @@ import Foundation
 
 
 struct Calculator {
+    // This class uses an array to temporarily store operands it needs to operate on.
+    
     internal var operands: [Double]
     // FIXME: Operand and operator names are too similar and confusing
     internal var lastOperand: Double?
@@ -29,21 +31,19 @@ struct Calculator {
     }
     
     internal mutating func performOperation(_ currentOperator: Operator,
-                                   firstOperand: Double,
                                    secondOperand: Double) {
+        // Performs operation and sets operand[0] to the result of the operation
+        
         switch currentOperator {
         case .add:
-            operands[0] = firstOperand + secondOperand
+            operands[0] += secondOperand
         case .subtract:
-            operands[0] = firstOperand - secondOperand
+            operands[0] -= secondOperand
         case .multiply:
-            operands[0] = firstOperand * secondOperand
+            operands[0] *= secondOperand
         case .divide:
             if secondOperand != 0 {
-                operands[0] = firstOperand / secondOperand
-            }
-            else {
-                operands[0] = firstOperand
+                operands[0] /= secondOperand
             }
         default:
             debugPrint("WARNING - attempting to operate with an invalid operator")
