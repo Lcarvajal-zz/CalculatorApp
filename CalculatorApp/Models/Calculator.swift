@@ -11,10 +11,10 @@ import Foundation
 
 struct Calculator {
     internal var operands: [Double]
+    // FIXME: Operand and operator names are too similar and confusing
     internal var lastOperand: Double?
     internal var lastOperator: Operator?
     internal var replaceOutput: Bool
-    
     
     init() {
         operands = []
