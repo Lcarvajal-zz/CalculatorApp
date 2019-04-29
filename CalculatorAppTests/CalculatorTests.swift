@@ -30,6 +30,7 @@ class CalculatorTests: XCTestCase {
     func testAddingOperandThenSubtractingOperand() {
         calculator.reset()
         calculator.performOperation(.add, secondOperand: 2.0)
+        calculator.removeAllOperandsButFirst()
         calculator.performOperation(.subtract, secondOperand: 5)
         XCTAssertEqual(calculator.getFirstFormattedOperand(), "-3")
     }
@@ -37,6 +38,7 @@ class CalculatorTests: XCTestCase {
     func testAddingOperandsConsecutively() {
         calculator.reset()
         calculator.performOperation(.add, secondOperand: 3)
+        calculator.removeAllOperandsButFirst()
         calculator.performOperation(.add, secondOperand: 5)
         XCTAssertEqual(calculator.getFirstFormattedOperand(), "8")
     }
