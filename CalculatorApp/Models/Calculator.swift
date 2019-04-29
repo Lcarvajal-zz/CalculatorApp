@@ -28,6 +28,28 @@ struct Calculator {
         replaceOutput = false
     }
     
+    internal mutating func performOperation(_ currentOperator: Operator,
+                                   firstOperand: Double,
+                                   secondOperand: Double) -> Double {
+        switch currentOperator {
+        case .add:
+            return firstOperand + secondOperand
+        case .subtract:
+            return firstOperand - secondOperand
+        case .multiply:
+            return firstOperand * secondOperand
+        case .divide:
+            if secondOperand != 0 {
+                return firstOperand / secondOperand
+            }
+            else {
+                return firstOperand
+            }
+        default:
+            return 0
+        }
+    }
+    
     internal func getFormattedOutput(for number: Double) -> String {
         if (number - floor(number)) != 0 {
             return String(number)

@@ -121,35 +121,13 @@ class ViewController: UIViewController {
             calculator.operands.append(outputNumber)
             calculator.replaceOutput = true
             if calculator.operands.count > 1 {
-                let result = performOperation(currentOperator,
+                let result = calculator.performOperation(currentOperator,
                                               firstOperand: calculator.operands[0],
                                               secondOperand: calculator.operands[1])
                 outputLabel.text = "\(result)"
                 calculator.lastOperand = calculator.operands.popLast()
                 calculator.operands[0] = result
             }
-        }
-    }
-    
-    internal func performOperation(_ currentOperator: Operator,
-                                   firstOperand: Double,
-                                   secondOperand: Double) -> Double {
-        switch currentOperator {
-        case .add:
-            return firstOperand + secondOperand
-        case .subtract:
-            return firstOperand - secondOperand
-        case .multiply:
-            return firstOperand * secondOperand
-        case .divide:
-            if secondOperand != 0 {
-                return firstOperand / secondOperand
-            }
-            else {
-                return firstOperand
-            }
-        default:
-            return 0
         }
     }
     
@@ -160,12 +138,12 @@ class ViewController: UIViewController {
             calculator.operands.count == 1 {
 
             if let existingLastOperand = calculator.lastOperand {
-                calculator.operands[0] = performOperation(existingLastOperator,
+                calculator.operands[0] = calculator.performOperation(existingLastOperator,
                                                firstOperand: calculator.operands[0],
                                                secondOperand: existingLastOperand)
             }
             else {
-                calculator.operands[0] = performOperation(existingLastOperator,
+                calculator.operands[0] = calculator.performOperation(existingLastOperator,
                                                firstOperand: calculator.operands[0],
                                                secondOperand: outputNumber)
                 calculator.lastOperand = outputNumber
