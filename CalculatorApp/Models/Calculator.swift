@@ -47,7 +47,8 @@ struct Calculator {
         var operatorToUse: Operator
         
         if let existingLastOperator = lastOperator,
-            lastOperator != currentOperator {
+            lastOperator != currentOperator,
+            currentOperator == .equals {
             operatorToUse = existingLastOperator
         }
         else {
