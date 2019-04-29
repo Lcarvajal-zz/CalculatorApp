@@ -115,18 +115,18 @@ class ViewController: UIViewController {
         }
 
         if let existingLastOperand = calculator.lastOperand {
-            calculator.operands[0] = calculator.performOperation(existingLastOperator,
-                                                                 firstOperand: calculator.operands[0],
-                                                                 secondOperand: existingLastOperand)
+            calculator.performOperation(existingLastOperator,
+                                        firstOperand: calculator.operands[0],
+                                        secondOperand: existingLastOperand)
         }
         else {
-            calculator.operands[0] = calculator.performOperation(existingLastOperator,
-                                                                 firstOperand: calculator.operands[0],
-                                                                 secondOperand: outputNumber)
+            calculator.performOperation(existingLastOperator,
+                                        firstOperand: calculator.operands[0],
+                                        secondOperand: outputNumber)
             calculator.lastOperand = outputNumber
         }
         
-        outputLabel.text = "\(calculator.operands[0])"
+        outputLabel.text = calculator.getFirstFormattedOperand()
         calculator.replaceOutput = true
     }
     
@@ -149,12 +149,11 @@ class ViewController: UIViewController {
             calculator.replaceOutput = true
             
             if calculator.operands.count > 1 {
-                let result = calculator.performOperation(currentOperator,
-                                                         firstOperand: calculator.operands[0],
-                                                         secondOperand: calculator.operands[1])
-                outputLabel.text = "\(result)"
+                calculator.performOperation(currentOperator,
+                                 firstOperand: calculator.operands[0],
+                                 secondOperand: calculator.operands[1])
+                outputLabel.text = calculator.getFirstFormattedOperand()
                 calculator.lastOperand = calculator.operands.popLast()
-                calculator.operands[0] = result
             }
         }
     }

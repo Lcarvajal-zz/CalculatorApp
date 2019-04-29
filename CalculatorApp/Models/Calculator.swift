@@ -30,33 +30,34 @@ struct Calculator {
     
     internal mutating func performOperation(_ currentOperator: Operator,
                                    firstOperand: Double,
-                                   secondOperand: Double) -> Double {
+                                   secondOperand: Double) {
         switch currentOperator {
         case .add:
-            return firstOperand + secondOperand
+            operands[0] = firstOperand + secondOperand
         case .subtract:
-            return firstOperand - secondOperand
+            operands[0] = firstOperand - secondOperand
         case .multiply:
-            return firstOperand * secondOperand
+            operands[0] = firstOperand * secondOperand
         case .divide:
             if secondOperand != 0 {
-                return firstOperand / secondOperand
+                operands[0] = firstOperand / secondOperand
             }
             else {
-                return firstOperand
+                operands[0] = firstOperand
             }
         default:
             debugPrint("WARNING - attempting to operate with an invalid operator")
-            return 0
         }
     }
     
-    internal func getFormattedOutput(for number: Double) -> String {
-        if (number - floor(number)) != 0 {
-            return String(number)
+    internal func getFirstFormattedOperand() -> String {
+        // Format 1.0 as 1 for output
+        let firstFormattedOperand = operands[0]
+        if (firstFormattedOperand - floor(firstFormattedOperand)) != 0 {
+            return String(firstFormattedOperand)
         }
         else {
-            let integerResult = Int(number)
+            let integerResult = Int(firstFormattedOperand)
             return String(integerResult)
         }
     }
