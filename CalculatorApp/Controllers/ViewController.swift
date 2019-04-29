@@ -41,7 +41,6 @@ class ViewController: UIViewController {
         view.addSubview(outputLabel)
         view.addSubview(buttonsCollectionView)
         
-        
         buttonsCollectionView.delegate = self
         buttonsCollectionView.dataSource = self
         
@@ -50,65 +49,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    // MARK: - Updating calculator output label
-    
-    fileprivate func replaceOutputLabelText(with text: String) {
-        if text != "." {
-            outputLabel.text = text
-        }
-        else if !outputLabel.text!.contains(".") {
-            outputLabel.text = "0."
-        }
-        calculator.replaceOutput = false
-    }
-    
-    fileprivate func handleEqualityOperator() {
-        if let outputText = outputLabel.text,
-            let outputNumber = Double(outputText),
-            let existingLastOperator = calculator.lastOperator,
-            calculator.operands.count == 1 {
-            
-            if let existingLastOperand = calculator.lastOperand {
-                calculator.operands[0] = calculator.performOperation(existingLastOperator,
-                                                                     firstOperand: calculator.operands[0],
-                                                                     secondOperand: existingLastOperand)
-            }
-            else {
-                calculator.operands[0] = calculator.performOperation(existingLastOperator,
-                                                                     firstOperand: calculator.operands[0],
-                                                                     secondOperand: outputNumber)
-                calculator.lastOperand = outputNumber
-            }
-            
-            outputLabel.text = "\(calculator.operands[0])"
-            calculator.replaceOutput = true
-        }
-    }
-    
-    fileprivate func handleNonEqualityOperator(_ currentOperator: Operator) {
-        if calculator.lastOperator != currentOperator {
-            calculator.lastOperator = currentOperator
-            calculator.lastOperand = nil
-        }
-        
-        if let outputText = outputLabel.text,
-            let outputNumber = Double(outputText),
-            !calculator.replaceOutput {
-            calculator.lastOperator = currentOperator
-            
-            calculator.operands.append(outputNumber)
-            calculator.replaceOutput = true
-            if calculator.operands.count > 1 {
-                let result = calculator.performOperation(currentOperator,
-                                                         firstOperand: calculator.operands[0],
-                                                         secondOperand: calculator.operands[1])
-                outputLabel.text = "\(result)"
-                calculator.lastOperand = calculator.operands.popLast()
-                calculator.operands[0] = result
-            }
-        }
     }
     
     // MARK: - Actions
@@ -123,8 +63,7 @@ class ViewController: UIViewController {
         calculator.lastOperand = nil
         
         if calculator.replaceOutput
-            || outputLabel.text == ""
-            || outputLabel.text == "0" {
+            || outputLabel.text == "" || outputLabel.text == "0" {
             replaceOutputLabelText(with: numberButtonText)
         }
         else if numberButtonText != "."
@@ -134,22 +73,90 @@ class ViewController: UIViewController {
     }
 
     @objc internal func tapOperator(sender: UIButton) {
-        if let buttonTitleLabel = sender.titleLabel,
-            let buttonTitleLabelText = buttonTitleLabel.text {
-            
-            let currentOperator = calculator.getOperator(for: buttonTitleLabelText)
-            if currentOperator == .equals {
-                handleEqualityOperator()
-            }
-            else {
-                handleNonEqualityOperator(currentOperator)
-            }
+        guard let buttonTitleLabel = sender.titleLabel,
+            let buttonTitleLabelText = buttonTitleLabel.text,
+            let currentOperator = Operator(rawValue: buttonTitleLabelText) else {
+                return
+        }
+        
+        if currentOperator == .equals {
+            handleEqualityOperator()
+        }
+        else {
+            handleNonEqualityOperator(currentOperator)
         }
     }
     
     @objc internal func tapSpecial(sender: UIButton) {
         calculator.reset()
         outputLabel.text = "0"
+    }
+    
+    // MARK: - Output label and calculations
+    
+    fileprivate func replaceOutputLabelText(with text: String) {
+        if text != "." {
+            outputLabel.text = text
+        }
+        else if !outputLabel.text!.contains(".") {
+            outputLabel.text = "0."
+        }
+        calculator.replaceOutput = false
+    }
+    
+    fileprivate func handleEqualityOperator() {
+        // FIXME: This code handles the cases where a user wants to tap the equality operator multiple times to continue performing the last performed operation. It should get refactored.
+        
+        guard let outputText = outputLabel.text,
+            let outputNumber = Double(outputText),
+            let existingLastOperator = calculator.lastOperator,
+            calculator.operands.count == 1 else {
+                return
+        }
+
+        if let existingLastOperand = calculator.lastOperand {
+            calculator.operands[0] = calculator.performOperation(existingLastOperator,
+                                                                 firstOperand: calculator.operands[0],
+                                                                 secondOperand: existingLastOperand)
+        }
+        else {
+            calculator.operands[0] = calculator.performOperation(existingLastOperator,
+                                                                 firstOperand: calculator.operands[0],
+                                                                 secondOperand: outputNumber)
+            calculator.lastOperand = outputNumber
+        }
+        
+        outputLabel.text = "\(calculator.operands[0])"
+        calculator.replaceOutput = true
+    }
+    
+    fileprivate func handleNonEqualityOperator(_ currentOperator: Operator) {
+        // FIXME: This code handles the cases where a user wants to tap the equality operator multiple times to continue performing the last performed operation. It should get refactored.
+        
+        if calculator.lastOperator != currentOperator {
+            calculator.lastOperator = currentOperator
+            calculator.lastOperand = nil
+        }
+        
+        guard let outputText = outputLabel.text,
+            let outputNumber = Double(outputText) else {
+                return
+        }
+        
+        if !calculator.replaceOutput {
+            calculator.lastOperator = currentOperator
+            calculator.operands.append(outputNumber)
+            calculator.replaceOutput = true
+            
+            if calculator.operands.count > 1 {
+                let result = calculator.performOperation(currentOperator,
+                                                         firstOperand: calculator.operands[0],
+                                                         secondOperand: calculator.operands[1])
+                outputLabel.text = "\(result)"
+                calculator.lastOperand = calculator.operands.popLast()
+                calculator.operands[0] = result
+            }
+        }
     }
 
     // MARK: - Constraints
