@@ -20,7 +20,7 @@ class NumberOutputLabel: UILabel {
         commonInit()
     }
     
-    private func commonInit() {
+    fileprivate func commonInit() {
         backgroundColor = .black
         numberOfLines = 1
         

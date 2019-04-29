@@ -27,7 +27,7 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
         commonInit()
     }
     
-    private func commonInit() {
+    fileprivate func commonInit() {
         backgroundColor = .black
         
         addSubview(button)
@@ -55,7 +55,7 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Constraints
     
-    private func configureConstraints() {
+    fileprivate func configureConstraints() {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         let views: [String: Any] = [

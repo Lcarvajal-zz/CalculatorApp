@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private let buttonTexts = [
+    fileprivate let buttonTexts = [
         "C", "+/-", "%", "÷",
         "7", "8", "9", "×",
         "4", "5", "6", "-",
@@ -20,8 +20,8 @@ class ViewController: UIViewController {
     
     fileprivate var replaceOutput = false
     
-    private let outputLabel =  NumberOutputLabel()
-    private var buttonsCollectionView: UICollectionView = {
+    fileprivate let outputLabel =  NumberOutputLabel()
+    fileprivate var buttonsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         return collectionView
     }()
     
-    private var calculator = Calculator()
+    fileprivate var calculator = Calculator()
     
     override func loadView() {
         super.loadView()
@@ -148,7 +148,7 @@ class ViewController: UIViewController {
 
     // MARK: - Constraints
     
-    private func configureConstraints() {
+    fileprivate func configureConstraints() {
         outputLabel.translatesAutoresizingMaskIntoConstraints = false
         buttonsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
