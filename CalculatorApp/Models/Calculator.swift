@@ -46,6 +46,7 @@ struct Calculator {
                 return firstOperand
             }
         default:
+            debugPrint("WARNING - attempting to operate with an invalid operator")
             return 0
         }
     }

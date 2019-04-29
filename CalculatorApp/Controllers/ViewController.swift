@@ -63,12 +63,14 @@ class ViewController: UIViewController {
         
         calculator.lastOperand = nil
         
-        if calculator.replaceOutput {
-            updateOutputLabelText(with: text)
+        if calculator.replaceOutput || outputLabel.text == "" || outputLabel.text == "0" {
+            if text != "." {
+                outputLabel.text = text
+            }
+            else if !outputLabel.text!.contains(".") {
+                outputLabel.text = "0."
+            }
             calculator.replaceOutput = false
-        }
-        else if outputLabel.text == "" || outputLabel.text == "0" {
-            updateOutputLabelText(with: text)
         }
         else {
             if text != "." || !outputLabel.text!.contains(".") {
@@ -78,12 +80,7 @@ class ViewController: UIViewController {
     }
     
     fileprivate func updateOutputLabelText(with buttonTitleLabel: String) {
-        if buttonTitleLabel != "." {
-            outputLabel.text = buttonTitleLabel
-        }
-        else if !outputLabel.text!.contains(".") {
-            outputLabel.text = "0."
-        }
+        
     }
 
     @objc internal func tapOperator(sender: UIButton) {
@@ -91,40 +88,16 @@ class ViewController: UIViewController {
             let buttonTitleLabelText = buttonTitleLabel.text {
             
             let currentOperator = calculator.getOperator(for: buttonTitleLabelText)
-            handleOperator(currentOperator: currentOperator)
-        }
-    }
-    
-    internal func handleOperator(currentOperator: Operator) {
-        if currentOperator == .equals {
-            handleEqualityOperator()
-        }
-        else {
-            if calculator.lastOperator != currentOperator {
-                calculator.lastOperator = currentOperator
-                calculator.lastOperand = nil
+            if currentOperator == .equals {
+                handleEqualityOperator()
             }
-            
-            if let outputText = outputLabel.text,
-                let outputNumber = Double(outputText),
-                !calculator.replaceOutput {
-                calculator.lastOperator = currentOperator
-                
-                calculator.operands.append(outputNumber)
-                calculator.replaceOutput = true
-                if calculator.operands.count > 1 {
-                    let result = calculator.performOperation(currentOperator,
-                                                             firstOperand: calculator.operands[0],
-                                                             secondOperand: calculator.operands[1])
-                    outputLabel.text = "\(result)"
-                    calculator.lastOperand = calculator.operands.popLast()
-                    calculator.operands[0] = result
-                }
+            else {
+                handleNonEqualityOperator(currentOperator)
             }
         }
     }
     
-    internal func handleEqualityOperator() {
+    fileprivate func handleEqualityOperator() {
         if let outputText = outputLabel.text,
             let outputNumber = Double(outputText),
             let existingLastOperator = calculator.lastOperator,
@@ -144,6 +117,30 @@ class ViewController: UIViewController {
             
             outputLabel.text = "\(calculator.operands[0])"
             calculator.replaceOutput = true
+        }
+    }
+    
+    fileprivate func handleNonEqualityOperator(_ currentOperator: Operator) {
+        if calculator.lastOperator != currentOperator {
+            calculator.lastOperator = currentOperator
+            calculator.lastOperand = nil
+        }
+        
+        if let outputText = outputLabel.text,
+            let outputNumber = Double(outputText),
+            !calculator.replaceOutput {
+            calculator.lastOperator = currentOperator
+            
+            calculator.operands.append(outputNumber)
+            calculator.replaceOutput = true
+            if calculator.operands.count > 1 {
+                let result = calculator.performOperation(currentOperator,
+                                                         firstOperand: calculator.operands[0],
+                                                         secondOperand: calculator.operands[1])
+                outputLabel.text = "\(result)"
+                calculator.lastOperand = calculator.operands.popLast()
+                calculator.operands[0] = result
+            }
         }
     }
     
