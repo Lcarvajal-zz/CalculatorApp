@@ -10,81 +10,30 @@ import Foundation
 
 
 struct Calculator {
-    fileprivate var needsToCalculateResult: Bool
-    fileprivate var lastOperator: Operator
-    fileprivate var currentResult: Double
-    fileprivate var operand: Double?
+    internal var operands: [Double]
+    internal var lastOperand: Double?
+    internal var lastOperator: Operator?
+    internal var replaceOutput: Bool
+    
     
     init() {
-        needsToCalculateResult = false
-        currentResult = 0
-        operand = nil
-        lastOperator = .none
+        operands = []
+        replaceOutput = false
     }
     
-    internal mutating func resetOperands() {
-        currentResult = 0
-        operand = nil
-        lastOperator = .none
-        needsToCalculateResult = false
+    internal mutating func reset() {
+        operands = []
+        lastOperand = nil
+        lastOperator = nil
+        replaceOutput = false
     }
     
-    internal mutating func updateCurrentResult(for outputNumber: Double) {
-        if operand == nil {
-            operand = outputNumber
-        }
-        operateOnCurrentResultIfNeeded()
-        needsToCalculateResult = false
-    }
-    
-    internal mutating func operate(_ newOperator: Operator, _ outputNumber: Double) {
-        debugPrint("Called with \(outputNumber)")
-        debugPrint(currentResult)
-        debugPrint(operand)
-        debugPrint(needsToCalculateResult)
-        if needsToCalculateResult {
-            updateCurrentResult(for: outputNumber)
+    internal func getFormattedOutput(for number: Double) -> String {
+        if (number - floor(number)) != 0 {
+            return String(number)
         }
         else {
-            operateOnCurrentResultIfNeeded()
-            currentResult = outputNumber
-            lastOperator = newOperator
-            needsToCalculateResult = true
-            operand = nil
-        }
-    }
-    
-    internal mutating func operateOnCurrentResultIfNeeded() {
-        guard let secondOperand = operand else {
-            debugPrint("Second operand is nil")
-            return
-        }
-        switch lastOperator {
-        case .none:
-            debugPrint("No operator selected for calculation")
-        case .add:
-            currentResult += secondOperand
-        case .subtract:
-            currentResult -= secondOperand
-        case .multiply:
-            currentResult *= secondOperand
-        case .divide:
-            if secondOperand != 0 {
-                currentResult = currentResult / secondOperand
-            }
-            else {
-                currentResult = 0
-                debugPrint("Attempting to divide by 0")
-            }
-        }
-    }
-    
-    internal func getFormattedCurrentResult() -> String {
-        if (currentResult - floor(currentResult)) != 0 {
-            return String(currentResult)
-        }
-        else {
-            let integerResult = Int(currentResult)
+            let integerResult = Int(number)
             return String(integerResult)
         }
     }
