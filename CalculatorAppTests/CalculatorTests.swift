@@ -21,17 +21,26 @@ class CalculatorTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func testConsecutiveOperations() {
+    func testAdding2FromResetShouldBe2() {
         calculator.reset()
-        calculator.operands.append(3)
         calculator.performOperation(.add, secondOperand: 2)
-        calculator.performOperation(.subtract, secondOperand: 5)
-        calculator.performOperation(.multiply, secondOperand: 6)
-        calculator.performOperation(.divide, secondOperand: -2)
-        XCTAssertEqual(calculator.getFirstFormattedOperand(), "9")
+        XCTAssertEqual(calculator.getFirstFormattedOperand(), "2")
     }
     
-
+    func testAddingOperandThenSubtractingOperand() {
+        calculator.reset()
+        calculator.performOperation(.add, secondOperand: 2.0)
+        calculator.performOperation(.subtract, secondOperand: 5)
+        XCTAssertEqual(calculator.getFirstFormattedOperand(), "-3")
+    }
+    
+    func testAddingOperandsConsecutively() {
+        calculator.reset()
+        calculator.performOperation(.add, secondOperand: 3)
+        calculator.performOperation(.add, secondOperand: 5)
+        XCTAssertEqual(calculator.getFirstFormattedOperand(), "8")
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

@@ -14,11 +14,11 @@ struct Calculator {
     internal var lastOperator: Operator?
     
     init() {
-        operands = []
+        operands = [0]
     }
     
     internal mutating func reset() {
-        operands = []
+        operands = [0]
         lastOperator = nil
     }
     
@@ -44,7 +44,17 @@ struct Calculator {
             return
         }
         
-        switch currentOperator {
+        var operatorToUse: Operator
+        
+        if let existingLastOperator = lastOperator,
+            lastOperator != currentOperator {
+            operatorToUse = existingLastOperator
+        }
+        else {
+            operatorToUse = currentOperator
+        }
+        
+        switch operatorToUse {
         case .add:
             operands[0] += operandToUse
         case .subtract:
@@ -55,10 +65,14 @@ struct Calculator {
             if secondOperand != 0 {
                 operands[0] /= operandToUse
             }
-        default:
-            debugPrint("WARNING - attempting to operate with an invalid operator")
+        case .equals:
+            if let existingLastOperator = lastOperator {
+                performOperation(existingLastOperator, secondOperand: secondOperand)
+            }
+            return
         }
         
+        lastOperator = currentOperator
         operands.append(operandToUse)
     }
     

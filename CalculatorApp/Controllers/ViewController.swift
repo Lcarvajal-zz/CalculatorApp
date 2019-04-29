@@ -112,24 +112,17 @@ class ViewController: UIViewController {
         
         guard let outputText = outputLabel.text,
             let outputNumber = Double(outputText),
-            let existingLastOperator = calculator.lastOperator,
             calculator.operands.count >= 1 else {
                 return
         }
 
-        calculator.performOperation(existingLastOperator,
-                                    secondOperand: outputNumber)
+        calculator.performOperation(.equals, secondOperand: outputNumber)
         outputLabel.text = calculator.getFirstFormattedOperand()
         replaceOutput = true
     }
     
     fileprivate func handleNonEqualityOperator(_ currentOperator: Operator) {
         // FIXME: This code handles the cases where a user wants to tap the equality operator multiple times to continue performing the last performed operation. It should get refactored.
-        
-        if calculator.lastOperator != currentOperator {
-            calculator.lastOperator = currentOperator
-            calculator.removeAllOperandsButFirst()
-        }
         
         guard let outputText = outputLabel.text,
             let outputNumber = Double(outputText) else {
@@ -139,9 +132,7 @@ class ViewController: UIViewController {
         if !replaceOutput {
             replaceOutput = true
             
-            calculator.lastOperator = currentOperator
-            calculator.operands.append(outputNumber)
-            calculator.performOperation(currentOperator, secondOperand: nil)
+            calculator.performOperation(currentOperator, secondOperand: outputNumber)
             outputLabel.text = calculator.getFirstFormattedOperand()
         }
     }
