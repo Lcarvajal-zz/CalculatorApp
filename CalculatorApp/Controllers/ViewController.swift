@@ -10,13 +10,15 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let buttonTexts = [
+    private let buttonTexts = [
         "C", "+/-", "%", "÷",
         "7", "8", "9", "×",
         "4", "5", "6", "-",
         "1", "2", "3", "+",
         "0", "0", ".", "="
     ]
+    
+    fileprivate var replaceOutput = false
     
     private let outputLabel =  NumberOutputLabel()
     private var buttonsCollectionView: UICollectionView = {
@@ -62,7 +64,7 @@ class ViewController: UIViewController {
         
         calculator.removeAllOperandsButFirst()
         
-        if calculator.replaceOutput
+        if replaceOutput
             || outputLabel.text == "" || outputLabel.text == "0" {
             replaceOutputLabelText(with: numberButtonText)
         }
@@ -89,6 +91,7 @@ class ViewController: UIViewController {
     
     @objc internal func tapSpecial(sender: UIButton) {
         calculator.reset()
+        replaceOutput = false
         outputLabel.text = "0"
     }
     
@@ -101,7 +104,7 @@ class ViewController: UIViewController {
         else if !outputLabel.text!.contains(".") {
             outputLabel.text = "0."
         }
-        calculator.replaceOutput = false
+        replaceOutput = false
     }
     
     fileprivate func handleEqualityOperator() {
@@ -117,7 +120,7 @@ class ViewController: UIViewController {
         calculator.performOperation(existingLastOperator,
                                     secondOperand: outputNumber)
         outputLabel.text = calculator.getFirstFormattedOperand()
-        calculator.replaceOutput = true
+        replaceOutput = true
     }
     
     fileprivate func handleNonEqualityOperator(_ currentOperator: Operator) {
@@ -133,16 +136,13 @@ class ViewController: UIViewController {
                 return
         }
         
-        if !calculator.replaceOutput {
+        if !replaceOutput {
+            replaceOutput = true
+            
             calculator.lastOperator = currentOperator
             calculator.operands.append(outputNumber)
-            calculator.replaceOutput = true
-            
-            if calculator.operands.count > 1 {
-                calculator.performOperation(currentOperator,
-                                 secondOperand: calculator.operands[1])
-                outputLabel.text = calculator.getFirstFormattedOperand()
-            }
+            calculator.performOperation(currentOperator, secondOperand: nil)
+            outputLabel.text = calculator.getFirstFormattedOperand()
         }
     }
 

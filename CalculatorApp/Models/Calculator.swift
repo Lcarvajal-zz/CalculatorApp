@@ -12,17 +12,14 @@ import Foundation
 struct Calculator {
     internal var operands: [Double]     // Cache of operands
     internal var lastOperator: Operator?
-    internal var replaceOutput: Bool    // Not sure if this should be here
     
     init() {
         operands = []
-        replaceOutput = false
     }
     
     internal mutating func reset() {
         operands = []
         lastOperator = nil
-        replaceOutput = false
     }
     
     internal mutating func removeAllOperandsButFirst() {
@@ -32,15 +29,19 @@ struct Calculator {
     }
     
     internal mutating func performOperation(_ currentOperator: Operator,
-                                   secondOperand: Double) {
+                                   secondOperand: Double?) {
         // Performs operation and sets operand[0] to the result of the operation
         
         var operandToUse: Double
+        
         if operands.count > 1 {
             operandToUse = operands.last!
         }
+        else if let existingSecondOperand = secondOperand {
+            operandToUse = existingSecondOperand
+        }
         else {
-            operandToUse = secondOperand
+            return
         }
         
         switch currentOperator {
