@@ -59,12 +59,30 @@ struct Calculator {
             return String(integerResult)
         }
     }
+    
+    internal func getOperator(for operatorString: String) -> Operator {
+        switch operatorString {
+        case "+":
+            return Operator.add
+        case "-":
+            return Operator.subtract
+        case "×":
+            return Operator.multiply
+        case "÷":
+            return Operator.divide
+        case "=":
+            return Operator.equals
+        default:
+            debugPrint("\(operatorString) is not a valid operator title")
+            fatalError()
+        }
+    }
 }
 
 enum Operator {
-    case none
     case add
     case subtract
     case multiply
     case divide
+    case equals
 }
