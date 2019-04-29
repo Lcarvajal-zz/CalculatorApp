@@ -21,7 +21,7 @@ class NumberOutputLabel: UILabel {
     }
     
     private func commonInit() {
-        backgroundColor = .darkGray
+        backgroundColor = .black
         numberOfLines = 1
         
         textAlignment = .right
