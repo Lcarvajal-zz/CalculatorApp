@@ -62,28 +62,27 @@ class ViewController: UIViewController {
         }
         
         calculator.lastOperand = nil
+        
         if calculator.replaceOutput {
-            if text != "." {
-                outputLabel.text = text
-            }
-             else if !outputLabel.text!.contains(".") {
-                outputLabel.text = "0."
-            }
-            
+            updateOutputLabelText(with: text)
             calculator.replaceOutput = false
         }
         else if outputLabel.text == "" || outputLabel.text == "0" {
-            if text != "." {
-                outputLabel.text = text
-            }
-            else if !outputLabel.text!.contains(".") {
-                outputLabel.text = "0."
-            }
+            updateOutputLabelText(with: text)
         }
         else {
             if text != "." || !outputLabel.text!.contains(".") {
                 outputLabel.text! += text
             }
+        }
+    }
+    
+    fileprivate func updateOutputLabelText(with buttonTitleLabel: String) {
+        if buttonTitleLabel != "." {
+            outputLabel.text = buttonTitleLabel
+        }
+        else if !outputLabel.text!.contains(".") {
+            outputLabel.text = "0."
         }
     }
 
