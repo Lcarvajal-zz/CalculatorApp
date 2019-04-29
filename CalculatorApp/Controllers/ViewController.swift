@@ -116,7 +116,6 @@ class ViewController: UIViewController {
 
         calculator.performOperation(existingLastOperator,
                                     secondOperand: outputNumber)
-        
         outputLabel.text = calculator.getFirstFormattedOperand()
         calculator.replaceOutput = true
     }

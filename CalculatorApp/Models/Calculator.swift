@@ -10,11 +10,9 @@ import Foundation
 
 
 struct Calculator {
-    // This class uses an array to temporarily store operands it needs to operate on.
-    
-    internal var operands: [Double]
+    internal var operands: [Double]     // Cache of operands
     internal var lastOperator: Operator?
-    internal var replaceOutput: Bool
+    internal var replaceOutput: Bool    // Not sure if this should be here
     
     init() {
         operands = []
