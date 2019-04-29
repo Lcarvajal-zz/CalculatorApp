@@ -60,7 +60,7 @@ class ViewController: UIViewController {
             return
         }
         
-        calculator.lastOperand = nil
+        calculator.removeAllOperandsButFirst()
         
         if calculator.replaceOutput
             || outputLabel.text == "" || outputLabel.text == "0" {
@@ -110,19 +110,12 @@ class ViewController: UIViewController {
         guard let outputText = outputLabel.text,
             let outputNumber = Double(outputText),
             let existingLastOperator = calculator.lastOperator,
-            calculator.operands.count == 1 else {
+            calculator.operands.count >= 1 else {
                 return
         }
 
-        if let existingLastOperand = calculator.lastOperand {
-            calculator.performOperation(existingLastOperator,
-                                        secondOperand: existingLastOperand)
-        }
-        else {
-            calculator.performOperation(existingLastOperator,
-                                        secondOperand: outputNumber)
-            calculator.lastOperand = outputNumber
-        }
+        calculator.performOperation(existingLastOperator,
+                                    secondOperand: outputNumber)
         
         outputLabel.text = calculator.getFirstFormattedOperand()
         calculator.replaceOutput = true
@@ -133,7 +126,7 @@ class ViewController: UIViewController {
         
         if calculator.lastOperator != currentOperator {
             calculator.lastOperator = currentOperator
-            calculator.lastOperand = nil
+            calculator.removeAllOperandsButFirst()
         }
         
         guard let outputText = outputLabel.text,
@@ -149,8 +142,6 @@ class ViewController: UIViewController {
             if calculator.operands.count > 1 {
                 calculator.performOperation(currentOperator,
                                  secondOperand: calculator.operands[1])
-                
-                calculator.lastOperand = calculator.operands.popLast()
                 outputLabel.text = calculator.getFirstFormattedOperand()
             }
         }

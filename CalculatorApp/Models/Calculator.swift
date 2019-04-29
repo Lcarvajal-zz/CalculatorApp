@@ -13,8 +13,6 @@ struct Calculator {
     // This class uses an array to temporarily store operands it needs to operate on.
     
     internal var operands: [Double]
-    // FIXME: Operand and operator names are too similar and confusing
-    internal var lastOperand: Double?
     internal var lastOperator: Operator?
     internal var replaceOutput: Bool
     
@@ -25,29 +23,44 @@ struct Calculator {
     
     internal mutating func reset() {
         operands = []
-        lastOperand = nil
         lastOperator = nil
         replaceOutput = false
+    }
+    
+    internal mutating func removeAllOperandsButFirst() {
+        if operands.count > 0 {
+            operands = [operands[0]]
+        }
     }
     
     internal mutating func performOperation(_ currentOperator: Operator,
                                    secondOperand: Double) {
         // Performs operation and sets operand[0] to the result of the operation
         
+        var operandToUse: Double
+        if operands.count > 1 {
+            operandToUse = operands.last!
+        }
+        else {
+            operandToUse = secondOperand
+        }
+        
         switch currentOperator {
         case .add:
-            operands[0] += secondOperand
+            operands[0] += operandToUse
         case .subtract:
-            operands[0] -= secondOperand
+            operands[0] -= operandToUse
         case .multiply:
-            operands[0] *= secondOperand
+            operands[0] *= operandToUse
         case .divide:
             if secondOperand != 0 {
-                operands[0] /= secondOperand
+                operands[0] /= operandToUse
             }
         default:
             debugPrint("WARNING - attempting to operate with an invalid operator")
         }
+        
+        operands.append(operandToUse)
     }
     
     internal func getFirstFormattedOperand() -> String {
