@@ -52,49 +52,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    // MARK: - Actions
+    // MARK: - Updating calculator output label
     
-    @objc internal func tapNumber(sender: UIButton) {
-        guard let titleLabel = sender.titleLabel,
-            let text = titleLabel.text else {
-            debugPrint("Attempting to tap button with no number set on calculator")
-            return
+    fileprivate func replaceOutputLabelText(with text: String) {
+        if text != "." {
+            outputLabel.text = text
         }
-        
-        calculator.lastOperand = nil
-        
-        if calculator.replaceOutput || outputLabel.text == "" || outputLabel.text == "0" {
-            if text != "." {
-                outputLabel.text = text
-            }
-            else if !outputLabel.text!.contains(".") {
-                outputLabel.text = "0."
-            }
-            calculator.replaceOutput = false
+        else if !outputLabel.text!.contains(".") {
+            outputLabel.text = "0."
         }
-        else {
-            if text != "." || !outputLabel.text!.contains(".") {
-                outputLabel.text! += text
-            }
-        }
-    }
-    
-    fileprivate func updateOutputLabelText(with buttonTitleLabel: String) {
-        
-    }
-
-    @objc internal func tapOperator(sender: UIButton) {
-        if let buttonTitleLabel = sender.titleLabel,
-            let buttonTitleLabelText = buttonTitleLabel.text {
-            
-            let currentOperator = calculator.getOperator(for: buttonTitleLabelText)
-            if currentOperator == .equals {
-                handleEqualityOperator()
-            }
-            else {
-                handleNonEqualityOperator(currentOperator)
-            }
-        }
+        calculator.replaceOutput = false
     }
     
     fileprivate func handleEqualityOperator() {
@@ -102,16 +69,16 @@ class ViewController: UIViewController {
             let outputNumber = Double(outputText),
             let existingLastOperator = calculator.lastOperator,
             calculator.operands.count == 1 {
-
+            
             if let existingLastOperand = calculator.lastOperand {
                 calculator.operands[0] = calculator.performOperation(existingLastOperator,
-                                               firstOperand: calculator.operands[0],
-                                               secondOperand: existingLastOperand)
+                                                                     firstOperand: calculator.operands[0],
+                                                                     secondOperand: existingLastOperand)
             }
             else {
                 calculator.operands[0] = calculator.performOperation(existingLastOperator,
-                                               firstOperand: calculator.operands[0],
-                                               secondOperand: outputNumber)
+                                                                     firstOperand: calculator.operands[0],
+                                                                     secondOperand: outputNumber)
                 calculator.lastOperand = outputNumber
             }
             
@@ -140,6 +107,42 @@ class ViewController: UIViewController {
                 outputLabel.text = "\(result)"
                 calculator.lastOperand = calculator.operands.popLast()
                 calculator.operands[0] = result
+            }
+        }
+    }
+    
+    // MARK: - Actions
+    
+    @objc internal func tapNumber(sender: UIButton) {
+        guard let numberButtonTitleLabel = sender.titleLabel,
+            let numberButtonText = numberButtonTitleLabel.text else {
+            debugPrint("Attempting to tap button with no number set on calculator")
+            return
+        }
+        
+        calculator.lastOperand = nil
+        
+        if calculator.replaceOutput
+            || outputLabel.text == ""
+            || outputLabel.text == "0" {
+            replaceOutputLabelText(with: numberButtonText)
+        }
+        else if numberButtonText != "."
+            || !outputLabel.text!.contains(".")  {
+            outputLabel.text! += numberButtonText
+        }
+    }
+
+    @objc internal func tapOperator(sender: UIButton) {
+        if let buttonTitleLabel = sender.titleLabel,
+            let buttonTitleLabelText = buttonTitleLabel.text {
+            
+            let currentOperator = calculator.getOperator(for: buttonTitleLabelText)
+            if currentOperator == .equals {
+                handleEqualityOperator()
+            }
+            else {
+                handleNonEqualityOperator(currentOperator)
             }
         }
     }
