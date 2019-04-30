@@ -19,15 +19,16 @@ enum Operator: String {
 struct Calculator {
     internal var repeatPreviousCalculation = false  // Used for tapping equal sign repeatedly
     internal var operands: [Double]     // Cache of operands
-    internal var selectedOperator: Operator?
+    internal var selectedOperator: Operator
     
     init() {
         operands = []
+        // It doesn't matter what the initial value of selectedOperator is
+        selectedOperator = .add
     }
     
     internal mutating func reset() {
         operands = []
-        selectedOperator = nil
     }
     
     internal mutating func gather(number: Double, operatorInput: Operator) {
@@ -54,8 +55,7 @@ struct Calculator {
     
     fileprivate mutating func calculateIfEnoughOperandsExist() {
         guard operands.count >= 2,
-            let lastOperand = operands.last,
-            let selectedOperator = selectedOperator else {
+            let lastOperand = operands.last else {
                 debugPrint("Attempting to calculate with less than two operands or without an operator")
                 return
         }
