@@ -43,6 +43,25 @@ class CalculatorTests: XCTestCase {
         XCTAssertEqual(calculator.getFirstFormattedOperand(), "8")
     }
     
+    func testAddingOperandsThenPressingEqualityOperatorMultipleTimes() {
+        calculator.reset()
+        calculator.performOperation(.add, secondOperand: 3)
+        calculator.performOperation(.equals, secondOperand: nil)
+        calculator.performOperation(.equals, secondOperand: nil)
+        calculator.performOperation(.equals, secondOperand: nil)
+        XCTAssertEqual(calculator.getFirstFormattedOperand(), "12")
+    }
+    
+    func testAddingOperandsThenMultiplyingOperands() {
+        calculator.reset()
+        calculator.performOperation(.add, secondOperand: 3)
+        calculator.removeAllOperandsButFirst()
+        calculator.performOperation(.add, secondOperand: 5)
+        calculator.removeAllOperandsButFirst()
+        calculator.performOperation(.multiply, secondOperand: 2)
+        XCTAssertEqual(calculator.getFirstFormattedOperand(), "16")
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

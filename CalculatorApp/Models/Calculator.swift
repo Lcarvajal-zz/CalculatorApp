@@ -10,7 +10,11 @@ import Foundation
 
 
 struct Calculator {
+    internal var repeatPreviousCalculation = false
     internal var operands: [Double]     // Cache of operands
+    internal var selectedOperator: Operator?
+    
+    
     internal var lastOperator: Operator?
     
     init() {
@@ -28,6 +32,48 @@ struct Calculator {
         }
     }
     
+    internal mutating func gather(number: Double, operatorInput: Operator) {
+        if operatorInput != .equals && !repeatPreviousCalculation {
+            operands.append(number)
+        }
+        
+        calculateIfEnoughOperandsExist()
+        
+        if operatorInput != .equals {
+            selectedOperator = operatorInput
+        }
+    }
+    
+    fileprivate mutating func calculateIfEnoughOperandsExist() {
+        guard operands.count >= 2,
+            let lastOperand = operands.last,
+            let selectedOperator = selectedOperator else {
+                debugPrint("Attempting to calculate with less than two operands or without an operator")
+                return
+        }
+        
+        switch selectedOperator {
+        case .add:
+            operands[0] += lastOperand
+        case .subtract:
+            operands[0] -= lastOperand
+        case .multiply:
+            operands[0] *= lastOperand
+        case .divide:
+            if lastOperand != 0 {
+                operands[0] /= lastOperand
+            }
+        case .equals:
+            return
+        default:
+            debugPrint("The selected operator is undefined")
+        }
+    }
+    
+    
+    
+    
+    
     internal mutating func performOperation(_ currentOperator: Operator,
                                    secondOperand: Double?) {
         // Performs operation and sets operand[0] to the result of the operation
@@ -35,9 +81,12 @@ struct Calculator {
         var operandToUse: Double
         
         if operands.count > 1 {
+            debugPrint(operands)
             operandToUse = operands.last!
         }
         else if let existingSecondOperand = secondOperand {
+            debugPrint("operands")
+            debugPrint(operands)
             operandToUse = existingSecondOperand
         }
         else {
@@ -73,7 +122,9 @@ struct Calculator {
             return
         }
         
-        lastOperator = currentOperator
+        if currentOperator != .equals {
+            lastOperator = currentOperator
+        }
         operands.append(operandToUse)
     }
     
