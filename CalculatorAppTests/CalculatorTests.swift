@@ -52,6 +52,15 @@ class CalculatorTests: XCTestCase {
         XCTAssertEqual(calculator.getFirstFormattedOperand(), "16")
     }
     
+    func testOperatingAfterPerformingAnOperationAndUsingEqualityOperator() {
+        calculator.gather(number: 1, operatorInput: .add)
+        calculator.gather(number: 2, operatorInput: .subtract)
+        calculator.gather(number: 4, operatorInput: .equals)
+        calculator.gather(number: -2, operatorInput: .multiply)
+        calculator.gather(number: 0, operatorInput: .equals)
+        XCTAssertEqual(calculator.getFirstFormattedOperand(), "2")
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
