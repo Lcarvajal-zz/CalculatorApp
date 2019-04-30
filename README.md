@@ -16,7 +16,7 @@ Portable, electronic, arithmetic; this, is the calculator app.
 
 - [x] Build basic UI
 - [x] Get addition, subtraction, multiplication and division to work
-- [ ] Refactor giant mess I made and set up proper tests
+- [x] Refactor giant mess I made and set up proper tests
 - [ ] Write UI tests
 - [ ] Update UI with to closer resemble a finished calculator
 - [ ] Fix issue with doubles arithmatic and prevent creating ginormous numbers
