@@ -18,29 +18,27 @@ struct Calculator {
     internal var lastOperator: Operator?
     
     init() {
-        operands = [0]
+        operands = []
     }
     
     internal mutating func reset() {
-        operands = [0]
+        operands = []
         lastOperator = nil
     }
     
-    internal mutating func removeAllOperandsButFirst() {
-        if operands.count > 0 {
-            operands = [operands[0]]
-        }
-    }
-    
     internal mutating func gather(number: Double, operatorInput: Operator) {
-        if operatorInput != .equals && !repeatPreviousCalculation {
+        if operatorInput != .equals || !repeatPreviousCalculation {
             operands.append(number)
+            repeatPreviousCalculation = false
         }
         
         calculateIfEnoughOperandsExist()
         
         if operatorInput != .equals {
             selectedOperator = operatorInput
+        }
+        else {
+            repeatPreviousCalculation = true
         }
     }
     
@@ -65,67 +63,7 @@ struct Calculator {
             }
         case .equals:
             return
-        default:
-            debugPrint("The selected operator is undefined")
         }
-    }
-    
-    
-    
-    
-    
-    internal mutating func performOperation(_ currentOperator: Operator,
-                                   secondOperand: Double?) {
-        // Performs operation and sets operand[0] to the result of the operation
-        
-        var operandToUse: Double
-        
-        if operands.count > 1 {
-            debugPrint(operands)
-            operandToUse = operands.last!
-        }
-        else if let existingSecondOperand = secondOperand {
-            debugPrint("operands")
-            debugPrint(operands)
-            operandToUse = existingSecondOperand
-        }
-        else {
-            return
-        }
-        
-        var operatorToUse: Operator
-        
-        if let existingLastOperator = lastOperator,
-            lastOperator != currentOperator,
-            currentOperator == .equals {
-            operatorToUse = existingLastOperator
-        }
-        else {
-            operatorToUse = currentOperator
-        }
-        
-        switch operatorToUse {
-        case .add:
-            operands[0] += operandToUse
-        case .subtract:
-            operands[0] -= operandToUse
-        case .multiply:
-            operands[0] *= operandToUse
-        case .divide:
-            if secondOperand != 0 {
-                operands[0] /= operandToUse
-            }
-        case .equals:
-            if let existingLastOperator = lastOperator {
-                performOperation(existingLastOperator, secondOperand: secondOperand)
-            }
-            return
-        }
-        
-        if currentOperator != .equals {
-            lastOperator = currentOperator
-        }
-        operands.append(operandToUse)
     }
     
     internal func getFirstFormattedOperand() -> String {

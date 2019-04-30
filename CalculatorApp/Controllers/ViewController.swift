@@ -62,8 +62,6 @@ class ViewController: UIViewController {
             return
         }
         
-        calculator.removeAllOperandsButFirst()
-        
         if replaceOutput
             || outputLabel.text == "" || outputLabel.text == "0" {
             replaceOutputLabelText(with: numberButtonText)
@@ -77,18 +75,15 @@ class ViewController: UIViewController {
     @objc internal func tapOperator(sender: UIButton) {
         guard let buttonTitleLabel = sender.titleLabel,
             let buttonTitleLabelText = buttonTitleLabel.text,
-            let currentOperator = Operator(rawValue: buttonTitleLabelText) else {
+            let currentOperator = Operator(rawValue: buttonTitleLabelText),
+            let outputLabelText = outputLabel.text,
+            let outputNumber = Double(outputLabelText) else {
                 return
         }
         
-        if currentOperator == .equals {
-            handleEqualityOperator()
-        }
-        else {
-            replaceOutput = true
-            calculator.performOperation(currentOperator, secondOperand: Double(outputLabel.text!)!)
-            outputLabel.text = calculator.getFirstFormattedOperand()
-        }
+        replaceOutput = true
+        calculator.gather(number: outputNumber, operatorInput: currentOperator)
+        outputLabel.text = calculator.getFirstFormattedOperand()
     }
     
     @objc internal func tapSpecial(sender: UIButton) {
@@ -107,20 +102,6 @@ class ViewController: UIViewController {
             outputLabel.text = "0."
         }
         replaceOutput = false
-    }
-    
-    fileprivate func handleEqualityOperator() {
-        // FIXME: This code handles the cases where a user wants to tap the equality operator multiple times to continue performing the last performed operation. It should get refactored.
-        
-        guard let outputText = outputLabel.text,
-            let outputNumber = Double(outputText),
-            calculator.operands.count >= 1 else {
-                return
-        }
-
-        calculator.performOperation(.equals, secondOperand: outputNumber)
-        outputLabel.text = calculator.getFirstFormattedOperand()
-        replaceOutput = true
     }
     
     // MARK: - Constraints
