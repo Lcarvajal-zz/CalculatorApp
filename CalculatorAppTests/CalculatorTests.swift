@@ -56,8 +56,8 @@ class CalculatorTests: XCTestCase {
         calculator.gather(number: 1, operatorInput: .add)
         calculator.gather(number: 2, operatorInput: .subtract)
         calculator.gather(number: 4, operatorInput: .equals)
-        calculator.gather(number: -2, operatorInput: .multiply)
-        calculator.gather(number: 0, operatorInput: .equals)
+        calculator.gather(number: -1, operatorInput: .multiply) // Number does not matter here
+        calculator.gather(number: -2, operatorInput: .equals)
         XCTAssertEqual(calculator.getFirstFormattedOperand(), "2")
     }
     

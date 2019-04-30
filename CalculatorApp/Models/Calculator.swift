@@ -29,10 +29,16 @@ struct Calculator {
     internal mutating func gather(number: Double, operatorInput: Operator) {
         if operatorInput != .equals || !repeatPreviousCalculation {
             operands.append(number)
+            
+            if !repeatPreviousCalculation {
+                calculateIfEnoughOperandsExist()
+            }
+            
             repeatPreviousCalculation = false
         }
-        
-        calculateIfEnoughOperandsExist()
+        else {
+            calculateIfEnoughOperandsExist()
+        }
         
         if operatorInput != .equals {
             selectedOperator = operatorInput
