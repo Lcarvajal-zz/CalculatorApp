@@ -27,7 +27,7 @@ struct Calculator {
     
     internal mutating func reset() {
         operands = []
-        lastOperator = nil
+        selectedOperator = nil
     }
     
     internal mutating func gather(number: Double, operatorInput: Operator) {
