@@ -10,13 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    fileprivate let buttonTexts = [
-        "C", "+/-", "%", "÷",
-        "7", "8", "9", "×",
-        "4", "5", "6", "-",
-        "1", "2", "3", "+",
-        "0", "0", ".", "="
-    ]
+    fileprivate let buttonTexts = Constant.calculatorButtons
     
     fileprivate var replaceOutput = false
     
