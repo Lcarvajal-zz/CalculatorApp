@@ -34,7 +34,7 @@ class CalculatorTests: XCTestCase {
         XCTAssertEqual(calculator.getFirstFormattedOperand(), "-3")
     }
 
-    func testAddingOperandsThenPressingEqualityOperatorMultipleTimes() {
+    func testAddingOperandsThenPressingEqualSignMultipleTimes() {
         calculator.gather(number: 0, operatorInput: .add)
         calculator.gather(number: 3, operatorInput: .equals)
         // Number does not matter in the three methods below
@@ -52,7 +52,7 @@ class CalculatorTests: XCTestCase {
         XCTAssertEqual(calculator.getFirstFormattedOperand(), "16")
     }
     
-    func testOperatingAfterPerformingAnOperationAndUsingEqualityOperator() {
+    func testOperatingAfterPerformingAnOperationAndUsingEqualSign() {
         calculator.gather(number: 1, operatorInput: .add)
         calculator.gather(number: 2, operatorInput: .subtract)
         calculator.gather(number: 4, operatorInput: .equals)
