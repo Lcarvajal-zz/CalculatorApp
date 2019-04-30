@@ -23,7 +23,6 @@ struct Calculator {
     
     init() {
         operands = []
-        // It doesn't matter what the initial value of selectedOperator is
         selectedOperator = .add
     }
     
@@ -53,6 +52,20 @@ struct Calculator {
         }
     }
     
+    internal func getFirstFormattedOperand() -> String {
+        // Format 2.0 as 2 for output
+        let firstFormattedOperand = operands[0]
+        if (firstFormattedOperand - floor(firstFormattedOperand)) != 0 {
+            return String(firstFormattedOperand)
+        }
+        else {
+            let integerResult = Int(firstFormattedOperand)
+            return String(integerResult)
+        }
+    }
+    
+    // MARK: - Private
+    
     fileprivate mutating func calculateIfEnoughOperandsExist() {
         guard operands.count >= 2,
             let lastOperand = operands.last else {
@@ -73,18 +86,6 @@ struct Calculator {
             }
         case .equals:
             return
-        }
-    }
-    
-    internal func getFirstFormattedOperand() -> String {
-        // Format 1.0 as 1 for output
-        let firstFormattedOperand = operands[0]
-        if (firstFormattedOperand - floor(firstFormattedOperand)) != 0 {
-            return String(firstFormattedOperand)
-        }
-        else {
-            let integerResult = Int(firstFormattedOperand)
-            return String(integerResult)
         }
     }
 }
