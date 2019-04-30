@@ -8,14 +8,18 @@
 
 import Foundation
 
+enum Operator: String {
+    case add = "+"
+    case subtract = "-"
+    case multiply = "×"
+    case divide = "÷"
+    case equals = "="
+}
 
 struct Calculator {
-    internal var repeatPreviousCalculation = false
+    internal var repeatPreviousCalculation = false  // Used for tapping equal sign repeatedly
     internal var operands: [Double]     // Cache of operands
     internal var selectedOperator: Operator?
-    
-    
-    internal var lastOperator: Operator?
     
     init() {
         operands = []
@@ -27,13 +31,13 @@ struct Calculator {
     }
     
     internal mutating func gather(number: Double, operatorInput: Operator) {
-        if operatorInput != .equals || !repeatPreviousCalculation {
+        if !repeatPreviousCalculation {
             operands.append(number)
-            
-            if !repeatPreviousCalculation {
-                calculateIfEnoughOperandsExist()
-            }
-            
+            calculateIfEnoughOperandsExist()
+            repeatPreviousCalculation = false
+        }
+        else if operatorInput != .equals {
+            operands.append(number)
             repeatPreviousCalculation = false
         }
         else {
@@ -83,12 +87,4 @@ struct Calculator {
             return String(integerResult)
         }
     }
-}
-
-enum Operator: String {
-    case add = "+"
-    case subtract = "-"
-    case multiply = "×"
-    case divide = "÷"
-    case equals = "="
 }
