@@ -151,8 +151,9 @@ class CalculatorAppUITests: XCTestCase {
     }
     
     func testTappingMultipleOperatorsConsecutivelyShouldNotPerformMultipleCalculations() {
+        let app = XCUIApplication()
 
-        let collectionViewsQuery = XCUIApplication().collectionViews
+        let collectionViewsQuery = app.collectionViews
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["-"]/*[[".cells.buttons[\"-\"]",".buttons[\"-\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
