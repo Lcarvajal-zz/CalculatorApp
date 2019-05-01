@@ -104,6 +104,11 @@ class ViewController: UIViewController {
             else {
                 outputLabel.text?.insert("-", at: outputLabelText.startIndex)
             }
+            
+            if calculator.repeatPreviousCalculation,
+                let outputNumber = Double(outputLabel.text!) {
+                calculator.operands[0] = outputNumber
+            }
         default:
             debugPrint("Attempting to permform \(buttonTitleLabelText), which hasn't been configured")
         }
