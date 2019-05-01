@@ -145,7 +145,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return buttonTexts.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -179,8 +179,18 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let oneFourthOfScreenWidth = collectionView.frame.width / 4
         
-        let size = CGSize(width: oneFourthOfScreenWidth,
+        let size: CGSize
+        
+        if buttonTexts[indexPath.row] == "0" {
+            let oneHalfOfScreenWidth = oneFourthOfScreenWidth * 2
+            size = CGSize(width: oneHalfOfScreenWidth,
                           height: oneFourthOfScreenWidth)
+        }
+        else {
+            size = CGSize(width: oneFourthOfScreenWidth,
+                          height: oneFourthOfScreenWidth)
+        }
+        
         return size
     }
     
