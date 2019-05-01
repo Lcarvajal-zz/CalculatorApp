@@ -29,7 +29,7 @@ class NumberOutputLabel: UILabel {
         textColor = .white
         text = "0"
         
-        font = UIFont.monospacedDigitSystemFont(ofSize: 80, weight: .light)
+        font = UIFont.monospacedDigitSystemFont(ofSize: 86, weight: .light)
         adjustsFontSizeToFitWidth = true
     }
 }
