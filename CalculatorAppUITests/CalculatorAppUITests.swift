@@ -149,4 +149,16 @@ class CalculatorAppUITests: XCTestCase {
         
         XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "10")
     }
+    
+    func testTappingMultipleOperatorsConsecutivelyShouldNotPerformMultipleCalculations() {
+
+        let collectionViewsQuery = XCUIApplication().collectionViews
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["-"]/*[[".cells.buttons[\"-\"]",".buttons[\"-\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["×"]/*[[".cells.buttons[\"×\"]",".buttons[\"×\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["÷"]/*[[".cells.buttons[\"÷\"]",".buttons[\"÷\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "5")
+    }
 }
