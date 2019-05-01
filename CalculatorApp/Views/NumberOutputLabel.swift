@@ -21,7 +21,7 @@ class NumberOutputLabel: UILabel {
     }
     
     fileprivate func commonInit() {
-        accessibilityLabel = "OutputLabel"
+        accessibilityIdentifier = "OutputLabel"
         backgroundColor = .black
         numberOfLines = 1
         

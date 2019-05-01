@@ -7,44 +7,39 @@
 //
 
 import XCTest
-@testable import CalculatorApp
+//@testable import CalculatorApp
 
 class CalculatorAppUITests: XCTestCase {
-    var app: XCUIApplication!
-
     override func setUp() {
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        app = XCUIApplication()
-        app.launchArguments.append("--uitesting")
-        app.launch()
-
+        XCUIApplication().launch()
+        
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testCalculatorButtonsShouldExistWhenAppStarts() {
-        for label in Constant.calculatorButtons {
-            XCTAssertTrue(app.buttons[label].exists)
-        }
-    }
     
     func testAddingOneTwoThreeShouldShowSix() {
-        app.buttons["1"].tap()
-        app.buttons["+"].tap()
-        app.buttons["2"].tap()
-        app.buttons["+"].tap()
-        app.buttons["3"].tap()
         
-//        let outputLabel = app.staticTexts["OutputLabel"]
-//        XCTAssertEqual(outputLabel.value as! String, "6")
+        let app = XCUIApplication()
         
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["1"]/*[[".cells.buttons[\"1\"]",".buttons[\"1\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        let button = collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        button.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["2"]/*[[".cells.buttons[\"2\"]",".buttons[\"2\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        button.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["3"]/*[[".cells.buttons[\"3\"]",".buttons[\"3\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["="]/*[[".cells.buttons[\"=\"]",".buttons[\"=\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        
+        XCTAssertEqual(app.staticTexts["OutputLabel"].label, "6")
     }
+    
+    
 
 }
