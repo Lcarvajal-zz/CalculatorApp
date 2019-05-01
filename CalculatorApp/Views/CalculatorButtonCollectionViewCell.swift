@@ -9,13 +9,7 @@
 import UIKit
 
 class CalculatorButtonCollectionViewCell: UICollectionViewCell {
-    internal let button: UIButton = {
-        let button = UIButton()
-        button.clipsToBounds = true
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .regular)
-        return button
-    }()
+    internal let button = CalculatorButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,6 +40,10 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
     internal func styleBright(_ buttonCharacter: String) {
         button.setTitle(buttonCharacter, for: .normal)
         button.backgroundColor = .orange
+        button.deselectedBackgroundColor = .orange
+        
+        button.selectedBackgroundColor = .white
+        button.setTitleColor(.orange, for: .selected)
     }
     
     internal func styleDark(_ buttonCharacter: String) {

@@ -173,18 +173,13 @@ class CalculatorAppUITests: XCTestCase {
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["×"]/*[[".cells.buttons[\"×\"]",".buttons[\"×\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["÷"]/*[[".cells.buttons[\"÷\"]",".buttons[\"÷\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         
-        let otherOperatorButtons = [
-            collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/,
-            collectionViewsQuery.buttons["-"],
-            collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["×"]/*[[".cells.buttons[\"×\"]",".buttons[\"×\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/ ]
-        
-        XCTAssertTrue(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["÷"]/*[[".cells.buttons[\"÷\"]",".buttons[\"÷\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled)
-        for button in otherOperatorButtons {
-            XCTAssertFalse(button.isEnabled)
-        }
+        XCTAssertTrue(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["÷"]/*[[".cells.buttons[\"÷\"]",".buttons[\"÷\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isSelected)
+        XCTAssertFalse(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isSelected)
+        XCTAssertFalse(collectionViewsQuery.buttons["-"].isSelected)
+        XCTAssertFalse(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["×"]/*[[".cells.buttons[\"×\"]",".buttons[\"×\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isSelected)
     }
     
-    func testOperatorShouldDeselectWhenTappingNumber() {
+    func testOperatorShouldStaySelectedWhenTappingNumber() {
         let app = XCUIApplication()
         
         let collectionViewsQuery = app.collectionViews
@@ -192,7 +187,7 @@ class CalculatorAppUITests: XCTestCase {
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery.buttons["5"].tap()
         
-        XCTAssertFalse(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled)
+        XCTAssertTrue(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isSelected)
     }
     
     func testOperatorShouldDeselectWhenTappingEqualSign() {
@@ -206,6 +201,6 @@ class CalculatorAppUITests: XCTestCase {
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery.buttons["="].tap()
         
-        XCTAssertFalse(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled)
+        XCTAssertFalse(collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isSelected)
     }
 }

@@ -77,10 +77,27 @@ class ViewController: UIViewController {
                 return
         }
         
+        deselectOperatorButtons()
+        sender.isSelected = true
+        
         replaceOutput = true
         calculator.gather(number: outputNumber, operatorInput: currentOperator)
         outputLabel.text = calculator.getFirstFormattedOperand()
+    }
+    
+    @objc internal func tapEqualSign(sender: UIButton) {
+        guard let buttonTitleLabel = sender.titleLabel,
+            let buttonTitleLabelText = buttonTitleLabel.text,
+            let currentOperator = Operator(rawValue: buttonTitleLabelText),
+            let outputLabelText = outputLabel.text,
+            let outputNumber = Double(outputLabelText) else {
+                return
+        }
         
+        deselectOperatorButtons()
+        replaceOutput = true
+        calculator.gather(number: outputNumber, operatorInput: currentOperator)
+        outputLabel.text = calculator.getFirstFormattedOperand()
     }
     
     @objc internal func tapSpecial(sender: UIButton) {
@@ -88,6 +105,7 @@ class ViewController: UIViewController {
             let buttonTitleLabelText = buttonTitleLabel.text else {
                 return
         }
+        deselectOperatorButtons()
         
         switch buttonTitleLabelText {
         case Constant.Sign.clear:
@@ -115,7 +133,7 @@ class ViewController: UIViewController {
         }
     }
     
-    // MARK: - Output label and calculations
+    // MARK: - Output label
     
     fileprivate func replaceOutputLabelText(with text: String) {
         if text != "." {
@@ -125,6 +143,45 @@ class ViewController: UIViewController {
             outputLabel.text = "0."
         }
         replaceOutput = false
+    }
+    
+    // MARK: - Calculator buttons
+    
+    fileprivate func getSelectedOperatorButton() -> UIButton? {
+        let operators = [Constant.Sign.addition,
+                         Constant.Sign.subtraction,
+                         Constant.Sign.multiplication,
+                         Constant.Sign.division]
+       
+        for operatorSign in operators {
+            if let operatorIndex = buttonTexts.firstIndex(of: operatorSign) {
+                let indexPath = IndexPath(row: operatorIndex, section: 0)
+                if let cell = buttonsCollectionView.cellForItem(at: indexPath) as? CalculatorButtonCollectionViewCell,
+                    cell.button.isSelected {
+                    return cell.button
+                }
+                
+            }
+        }
+        
+        return nil
+    }
+    
+    fileprivate func deselectOperatorButtons() {
+        let operators = [Constant.Sign.addition,
+                         Constant.Sign.subtraction,
+                         Constant.Sign.multiplication,
+                         Constant.Sign.division]
+        
+        for operatorSign in operators {
+            if let operatorIndex = buttonTexts.firstIndex(of: operatorSign) {
+                let indexPath = IndexPath(row: operatorIndex, section: 0)
+                
+                if let cell = buttonsCollectionView.cellForItem(at: indexPath) as? CalculatorButtonCollectionViewCell {
+                    cell.button.isSelected = false
+                }
+            }
+        }
     }
     
     // MARK: - Constraints
@@ -194,11 +251,15 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         case Constant.Sign.division,
              Constant.Sign.multiplication,
              Constant.Sign.subtraction,
-             Constant.Sign.addition,
-             Constant.Sign.equal:
+             Constant.Sign.addition:
             calculatorButtonCell.styleBright(buttonText)
             calculatorButtonCell.button.addTarget(self,
                                                   action: #selector(ViewController.tapOperator(sender:)),
+                                                  for: .touchUpInside)
+        case Constant.Sign.equal:
+            calculatorButtonCell.styleBright(buttonText)
+            calculatorButtonCell.button.addTarget(self,
+                                                  action: #selector(ViewController.tapEqualSign(sender:)),
                                                   for: .touchUpInside)
         case "0":
             calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "WideCell",
