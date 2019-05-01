@@ -19,7 +19,7 @@ Portable, electronic, arithmetic; this, is the calculator app.
 - [x] Refactor giant mess I made and set up proper tests
 - [x] Write UI tests
 - [x] Add +/- button functionality
-- [ ] Update UI with to closer resemble a finished calculator
+- [x] Update UI with to closer resemble a finished calculator
 - [ ] Add % button functionality
 - [ ] Fix issue with doubles arithmatic and prevent creating ginormous numbers
 - [ ] Support landscape mode
