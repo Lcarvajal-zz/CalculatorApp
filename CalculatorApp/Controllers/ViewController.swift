@@ -83,9 +83,30 @@ class ViewController: UIViewController {
     }
     
     @objc internal func tapSpecial(sender: UIButton) {
-        calculator.reset()
-        replaceOutput = false
-        outputLabel.text = "0"
+        guard let buttonTitleLabel = sender.titleLabel,
+            let buttonTitleLabelText = buttonTitleLabel.text else {
+                return
+        }
+        
+        switch buttonTitleLabelText {
+        case Constant.Sign.clear:
+            calculator.reset()
+            replaceOutput = false
+            outputLabel.text = "0"
+        case Constant.Sign.plusMinus:
+            guard let outputLabelText = outputLabel.text,
+                outputLabelText != "0"
+                else { return }
+            
+            if outputLabelText.contains("-") {
+                outputLabel.text?.removeFirst()
+            }
+            else {
+                outputLabel.text?.insert("-", at: outputLabelText.startIndex)
+            }
+        default:
+            debugPrint("Attempting to permform \(buttonTitleLabelText), which hasn't been configured")
+        }
     }
     
     // MARK: - Output label and calculations

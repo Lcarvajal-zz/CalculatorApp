@@ -99,4 +99,54 @@ class CalculatorAppUITests: XCTestCase {
         
         XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "49")
     }
+    
+    func testTappingPlusMinusSignWhenOutputLabelIsZeroShouldStayZero() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery.buttons["0"].tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+/-"]/*[[".cells.buttons[\"+\/-\"]",".buttons[\"+\/-\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "0")
+    }
+    
+    func testTappingPlusMinusSignWhenOutputLabelIsPositiveShouldTurnNegative() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+/-"]/*[[".cells.buttons[\"+\/-\"]",".buttons[\"+\/-\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "-5")
+       
+    }
+    
+    func testTappingPlusMinusSignWhenOutputLabelIsNegativeShouldTurnPositive() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery.buttons["0"].tap()
+        collectionViewsQuery.buttons["-"].tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery.buttons["="].tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+/-"]/*[[".cells.buttons[\"+\/-\"]",".buttons[\"+\/-\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "5")
+    }
+    
+    func testTappingPlusMinusSignWhenEqualSignWasPressedShouldUpdateOperand() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery.buttons["0"].tap()
+        collectionViewsQuery.buttons["-"].tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery.buttons["="].tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+/-"]/*[[".cells.buttons[\"+\/-\"]",".buttons[\"+\/-\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["×"]/*[[".cells.buttons[\"×\"]",".buttons[\"×\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery.buttons["2"].tap()
+        collectionViewsQuery.buttons["="].tap()
+        
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "10")
+    }
 }
