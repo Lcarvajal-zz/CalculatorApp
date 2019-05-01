@@ -58,6 +58,8 @@ class ViewController: UIViewController {
             return
         }
         
+        previouslySelectedOperator = false
+        
         if replaceOutput
             || outputLabel.text == "" || outputLabel.text == "0" {
             replaceOutputLabelText(with: numberButtonText)
@@ -67,6 +69,8 @@ class ViewController: UIViewController {
             outputLabel.text! += numberButtonText
         }
     }
+    
+    var previouslySelectedOperator = false
 
     @objc internal func tapOperator(sender: UIButton) {
         guard let buttonTitleLabel = sender.titleLabel,
@@ -79,10 +83,18 @@ class ViewController: UIViewController {
         
         deselectOperatorButtons()
         sender.isSelected = true
+
+        if !previouslySelectedOperator {
+            previouslySelectedOperator = true
+            
+            replaceOutput = true
+            calculator.gather(number: outputNumber, operatorInput: currentOperator)
+            outputLabel.text = calculator.getFirstFormattedOperand()
+        }
+        else {
+            calculator.selectedOperator = currentOperator
+        }
         
-        replaceOutput = true
-        calculator.gather(number: outputNumber, operatorInput: currentOperator)
-        outputLabel.text = calculator.getFirstFormattedOperand()
     }
     
     @objc internal func tapEqualSign(sender: UIButton) {
