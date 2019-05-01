@@ -11,8 +11,8 @@ import UIKit
 class ViewController: UIViewController {
     
     fileprivate let buttonTexts = Constant.calculatorButtons
-    
     fileprivate var replaceOutput = false
+    fileprivate var previouslySelectedOperator = false
     
     fileprivate let outputLabel =  NumberOutputLabel()
     fileprivate var buttonsCollectionView: UICollectionView = {
@@ -69,8 +69,6 @@ class ViewController: UIViewController {
             outputLabel.text! += numberButtonText
         }
     }
-    
-    var previouslySelectedOperator = false
 
     @objc internal func tapOperator(sender: UIButton) {
         guard let buttonTitleLabel = sender.titleLabel,
