@@ -31,7 +31,7 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
         backgroundColor = .black
         
         addSubview(button)
-        button.layer.cornerRadius = (frame.width - 10) / 2
+        button.layer.cornerRadius = (frame.height - 10) / 2
         
         configureConstraints()
     }
@@ -62,8 +62,6 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
             "button": button
         ]
         var constraints: [NSLayoutConstraint] = []
-        
-        // Centers orange background in cell
         
         let buttonBackgroundHorizontalConstraint = NSLayoutConstraint.constraints(
             withVisualFormat: "|-5-[button]-5-|",
