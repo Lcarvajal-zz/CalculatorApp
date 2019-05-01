@@ -25,6 +25,8 @@ class ViewController: UIViewController {
         collectionView.backgroundColor = .black
         collectionView.register(CalculatorButtonCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "Cell")
+        collectionView.register(WideCalculatorButtonCollectionViewCell.self,
+                                forCellWithReuseIdentifier: "WideCell")
         return collectionView
     }()
     
@@ -150,9 +152,9 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
-                                                                      for: indexPath) as! CalculatorButtonCollectionViewCell
         let buttonText = buttonTexts[indexPath.row]
+        var calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
+                                                                                          for: indexPath) as! CalculatorButtonCollectionViewCell
         
         switch buttonText {
         case Constant.Sign.clear,
@@ -172,6 +174,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
                                                   action: #selector(ViewController.tapOperator(sender:)),
                                                   for: .touchUpInside)
         case "0":
+            calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "WideCell",
+                                                                      for: indexPath) as! WideCalculatorButtonCollectionViewCell
             calculatorButtonCell.styleLight(buttonText)
             calculatorButtonCell.button.addTarget(self,
                                                   action: #selector(ViewController.tapNumber(sender:)),

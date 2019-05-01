@@ -27,7 +27,7 @@ class CalculatorButtonCollectionViewCell: UICollectionViewCell {
         commonInit()
     }
     
-    fileprivate func commonInit() {
+    internal func commonInit() {
         backgroundColor = .black
         
         addSubview(button)
