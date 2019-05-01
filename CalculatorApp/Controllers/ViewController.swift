@@ -152,20 +152,32 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
                                                                       for: indexPath) as! CalculatorButtonCollectionViewCell
+        let buttonText = buttonTexts[indexPath.row]
         
-        switch indexPath.row {
-        case 0..<3:
-            calculatorButtonCell.styleDark(buttonTexts[indexPath.row])
+        switch buttonText {
+        case Constant.Sign.clear,
+             Constant.Sign.plusMinus,
+             Constant.Sign.percentage:
+            calculatorButtonCell.styleDark(buttonText)
             calculatorButtonCell.button.addTarget(self,
                                                   action: #selector(ViewController.tapSpecial(sender:)),
                                                   for: .touchUpInside)
-        case 3, 7, 11, 15, 19:
-            calculatorButtonCell.styleBright(buttonTexts[indexPath.row])
+        case Constant.Sign.division,
+             Constant.Sign.multiplication,
+             Constant.Sign.subtraction,
+             Constant.Sign.addition,
+             Constant.Sign.equal:
+            calculatorButtonCell.styleBright(buttonText)
             calculatorButtonCell.button.addTarget(self,
                                                   action: #selector(ViewController.tapOperator(sender:)),
                                                   for: .touchUpInside)
+        case "0":
+            calculatorButtonCell.styleLight(buttonText)
+            calculatorButtonCell.button.addTarget(self,
+                                                  action: #selector(ViewController.tapNumber(sender:)),
+                                                  for: .touchUpInside)
         default:
-            calculatorButtonCell.styleLight(buttonTexts[indexPath.row])
+            calculatorButtonCell.styleLight(buttonText)
             calculatorButtonCell.button.addTarget(self,
                                                   action: #selector(ViewController.tapNumber(sender:)),
                                                   for: .touchUpInside)
