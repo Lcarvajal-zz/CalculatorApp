@@ -80,6 +80,7 @@ class ViewController: UIViewController {
         replaceOutput = true
         calculator.gather(number: outputNumber, operatorInput: currentOperator)
         outputLabel.text = calculator.getFirstFormattedOperand()
+        
     }
     
     @objc internal func tapSpecial(sender: UIButton) {
