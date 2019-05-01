@@ -22,9 +22,7 @@ class CalculatorAppUITests: XCTestCase {
     }
     
     func testAddingOneTwoThreeShouldShowSix() {
-        
         let app = XCUIApplication()
-        
         
         let collectionViewsQuery = app.collectionViews
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["1"]/*[[".cells.buttons[\"1\"]",".buttons[\"1\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
@@ -36,10 +34,22 @@ class CalculatorAppUITests: XCTestCase {
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["3"]/*[[".cells.buttons[\"3\"]",".buttons[\"3\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["="]/*[[".cells.buttons[\"=\"]",".buttons[\"=\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         
-        
         XCTAssertEqual(app.staticTexts["OutputLabel"].label, "6")
     }
     
     
-
+    func testAddingThreeAndPressingTheEqualSignThreeTimes() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["3"]/*[[".cells.buttons[\"3\"]",".buttons[\"3\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        let button = collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["="]/*[[".cells.buttons[\"=\"]",".buttons[\"=\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        button.tap()
+        button.tap()
+        button.tap()
+        
+        XCTAssertEqual(app.staticTexts["OutputLabel"].label, "9")
+    }
 }
