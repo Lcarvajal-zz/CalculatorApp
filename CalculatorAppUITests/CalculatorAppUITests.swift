@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import CalculatorApp
 
 class CalculatorAppUITests: XCTestCase {
     var app: XCUIApplication!
@@ -28,8 +29,22 @@ class CalculatorAppUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testCalculatorButtons() {
-        XCTAssertTrue(app.buttons["1"].exists)
+    func testCalculatorButtonsShouldExistWhenAppStarts() {
+        for label in Constant.calculatorButtons {
+            XCTAssertTrue(app.buttons[label].exists)
+        }
+    }
+    
+    func testAddingOneTwoThreeShouldShowSix() {
+        app.buttons["1"].tap()
+        app.buttons["+"].tap()
+        app.buttons["2"].tap()
+        app.buttons["+"].tap()
+        app.buttons["3"].tap()
+        
+//        let outputLabel = app.staticTexts["OutputLabel"]
+//        XCTAssertEqual(outputLabel.value as! String, "6")
+        
     }
 
 }
