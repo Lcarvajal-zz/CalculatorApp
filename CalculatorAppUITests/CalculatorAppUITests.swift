@@ -9,7 +9,12 @@
 import XCTest
 //@testable import CalculatorApp
 
+enum Constant {
+    static let outputLabel = "OutputLabel"
+}
+
 class CalculatorAppUITests: XCTestCase {
+    
     override func setUp() {
         continueAfterFailure = false
         XCUIApplication().launch()
@@ -19,6 +24,32 @@ class CalculatorAppUITests: XCTestCase {
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+    
+    func testTappingDecimalWhenAppStartsShouldAddNumbersAfterZeroPoint() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["."]/*[[".cells.buttons[\".\"]",".buttons[\".\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["1"]/*[[".cells.buttons[\"1\"]",".buttons[\"1\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["9"]/*[[".cells.buttons[\"9\"]",".buttons[\"9\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "0.159")
+    }
+    
+    func testTappingDecimalWhenOutputIsFiveShouldAddNumbersToEnd() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        let button = collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        button.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["."]/*[[".cells.buttons[\".\"]",".buttons[\".\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["4"]/*[[".cells.buttons[\"4\"]",".buttons[\"4\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        button.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["6"]/*[[".cells.buttons[\"6\"]",".buttons[\"6\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "5.456")
     }
     
     func testAddingOneTwoThreeShouldShowSix() {
@@ -34,7 +65,7 @@ class CalculatorAppUITests: XCTestCase {
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["3"]/*[[".cells.buttons[\"3\"]",".buttons[\"3\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["="]/*[[".cells.buttons[\"=\"]",".buttons[\"=\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         
-        XCTAssertEqual(app.staticTexts["OutputLabel"].label, "6")
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "6")
     }
     
     
@@ -50,6 +81,22 @@ class CalculatorAppUITests: XCTestCase {
         button.tap()
         button.tap()
         
-        XCTAssertEqual(app.staticTexts["OutputLabel"].label, "9")
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "9")
+    }
+    
+    func testAddingSubtractingAndMultiplyingThenPressEqualSign() {
+        let app = XCUIApplication()
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["5"]/*[[".cells.buttons[\"5\"]",".buttons[\"5\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["+"]/*[[".cells.buttons[\"+\"]",".buttons[\"+\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["3"]/*[[".cells.buttons[\"3\"]",".buttons[\"3\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["-"]/*[[".cells.buttons[\"-\"]",".buttons[\"-\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["1"]/*[[".cells.buttons[\"1\"]",".buttons[\"1\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["×"]/*[[".cells.buttons[\"×\"]",".buttons[\"×\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["7"]/*[[".cells.buttons[\"7\"]",".buttons[\"7\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        collectionViewsQuery/*@START_MENU_TOKEN@*/.buttons["="]/*[[".cells.buttons[\"=\"]",".buttons[\"=\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        XCTAssertEqual(app.staticTexts[Constant.outputLabel].label, "49")
     }
 }
