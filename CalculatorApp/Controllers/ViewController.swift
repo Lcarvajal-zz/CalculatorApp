@@ -9,12 +9,13 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+    fileprivate let outputLabel =  NumberOutputLabel()
     fileprivate let buttonTexts = Constant.calculatorButtons
+    
+    fileprivate var calculator = Calculator()
     fileprivate var replaceOutput = false
     fileprivate var previouslySelectedOperator = false
-    
-    fileprivate let outputLabel =  NumberOutputLabel()
+
     fileprivate var buttonsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -29,8 +30,6 @@ class ViewController: UIViewController {
                                 forCellWithReuseIdentifier: "WideCell")
         return collectionView
     }()
-    
-    fileprivate var calculator = Calculator()
     
     override func loadView() {
         super.loadView()
@@ -247,42 +246,27 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let buttonText = buttonTexts[indexPath.row]
-        var calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
-                                                                                          for: indexPath) as! CalculatorButtonCollectionViewCell
+        var calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CalculatorButtonCollectionViewCell
         
         switch buttonText {
-        case Constant.Sign.clear,
-             Constant.Sign.plusMinus,
+        case Constant.Sign.clear, Constant.Sign.plusMinus,
              Constant.Sign.percentage:
             calculatorButtonCell.styleDark(buttonText)
-            calculatorButtonCell.button.addTarget(self,
-                                                  action: #selector(ViewController.tapSpecial(sender:)),
-                                                  for: .touchUpInside)
-        case Constant.Sign.division,
-             Constant.Sign.multiplication,
-             Constant.Sign.subtraction,
-             Constant.Sign.addition:
+            calculatorButtonCell.button.addTarget(self, action: #selector(ViewController.tapSpecial(sender:)), for: .touchUpInside)
+        case Constant.Sign.division, Constant.Sign.multiplication,
+             Constant.Sign.subtraction, Constant.Sign.addition:
             calculatorButtonCell.styleBright(buttonText)
-            calculatorButtonCell.button.addTarget(self,
-                                                  action: #selector(ViewController.tapOperator(sender:)),
-                                                  for: .touchUpInside)
+            calculatorButtonCell.button.addTarget(self, action: #selector(ViewController.tapOperator(sender:)),  for: .touchUpInside)
         case Constant.Sign.equal:
             calculatorButtonCell.styleBright(buttonText)
-            calculatorButtonCell.button.addTarget(self,
-                                                  action: #selector(ViewController.tapEqualSign(sender:)),
-                                                  for: .touchUpInside)
+            calculatorButtonCell.button.addTarget(self, action: #selector(ViewController.tapEqualSign(sender:)), for: .touchUpInside)
         case "0":
-            calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "WideCell",
-                                                                      for: indexPath) as! WideCalculatorButtonCollectionViewCell
+            calculatorButtonCell = collectionView.dequeueReusableCell(withReuseIdentifier: "WideCell", for: indexPath) as! WideCalculatorButtonCollectionViewCell
             calculatorButtonCell.styleLight(buttonText)
-            calculatorButtonCell.button.addTarget(self,
-                                                  action: #selector(ViewController.tapNumber(sender:)),
-                                                  for: .touchUpInside)
+            calculatorButtonCell.button.addTarget(self, action: #selector(ViewController.tapNumber(sender:)), for: .touchUpInside)
         default:
             calculatorButtonCell.styleLight(buttonText)
-            calculatorButtonCell.button.addTarget(self,
-                                                  action: #selector(ViewController.tapNumber(sender:)),
-                                                  for: .touchUpInside)
+            calculatorButtonCell.button.addTarget(self, action: #selector(ViewController.tapNumber(sender:)), for: .touchUpInside)
         }
         
         return calculatorButtonCell
